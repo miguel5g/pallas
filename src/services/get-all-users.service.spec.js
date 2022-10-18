@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals';
 
 import '../tests/helpers/prisma-mock';
 import { prisma } from '../libs/prisma';
@@ -12,6 +12,10 @@ describe('GetAllUsersController.js', () => {
     service = new GetAllUsersService();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should have a handler method', () => {
     expect(service.handler).toBeDefined();
   });
@@ -22,11 +26,63 @@ describe('GetAllUsersController.js', () => {
     expect(prisma.user.findMany).toBeCalledTimes(1);
   });
 
-  it.todo('should use take and skip fields to paginate results');
+  it('should use take and skip fields to paginate results', async () => {
+    await service.handler(1);
 
-  it.todo('should use min take and skip value if passed value is invalid');
+    expect(prisma.user.findMany).toBeCalledWith({ skip: 0, take: 20, select: expect.anything() });
+  });
 
-  it.todo('should use select field to filter user fields');
+  it('should use take and skip fields to paginate results when page is passed', async () => {
+    await service.handler(15);
 
-  it.todo('should return an array with users object');
+    expect(prisma.user.findMany).toBeCalledWith({
+      skip: 280,
+      take: 20,
+      select: expect.anything(),
+    });
+  });
+
+  it('should use min take and skip value if passed page value is 0', async () => {
+    await service.handler(0);
+
+    expect(prisma.user.findMany).toBeCalledWith({ skip: 0, take: 20, select: expect.anything() });
+  });
+
+  it('should use min take and skip value if passed page value is an float', async () => {
+    await service.handler(1.5);
+
+    expect(prisma.user.findMany).toBeCalledWith({ skip: 0, take: 20, select: expect.anything() });
+  });
+
+  it('should use min take and skip value if passed page value is a NaN', async () => {
+    await service.handler();
+
+    expect(prisma.user.findMany).toBeCalledWith({ skip: 0, take: 20, select: expect.anything() });
+  });
+
+  it('should use select field to filter user fields', async () => {
+    await service.handler();
+
+    expect(prisma.user.findMany).toBeCalledWith({
+      skip: expect.anything(),
+      take: expect.anything(),
+      select: {
+        id: true,
+        name: true,
+        surname: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  });
+
+  it('should return an array with users object', async () => {
+    const users = ['user 1', 'user 2', 'user 3'];
+
+    prisma.user.findMany.mockResolvedValueOnce(users);
+
+    const output = await service.handler();
+
+    expect(output).toEqual(users);
+  });
 });
