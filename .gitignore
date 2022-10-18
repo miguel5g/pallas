@@ -3,5 +3,7 @@
 /dist
 
 # Files
-.env
+.env*
+!.env.example
+!.env.test
 *.local
