@@ -8,8 +8,13 @@
     "start:watch": "nodemon --watch \"dist/**/*\" -e js ./dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:e2e": "npm run docker:up && dotenv -e .env.test -- node database-test-connection.mjs && dotenv -e .env.test -- npm run prisma:deploy && jest -i -c jest-e2e.config.js",
     "build": "swc src -d dist",
     "build:watch": "swc src -w -d dist",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:migrate": "prisma migrate dev",
     "clean": "rm -rf dist"
   },
   "dependencies": {
