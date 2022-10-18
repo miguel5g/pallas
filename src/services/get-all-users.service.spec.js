@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 
 import '../tests/helpers/prisma-mock';
-import { prisma } from '../database/prisma';
+import { prisma } from '../libs/prisma';
 import { GetAllUsersService } from './get-all-users.service';
 
 describe('GetAllUsersController.js', () => {
