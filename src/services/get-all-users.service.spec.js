@@ -20,6 +20,13 @@ describe('GetAllUsersController.js', () => {
     expect(service.handler).toBeDefined();
   });
 
+  it('should calls prisma.user.count', async () => {
+    await service.handler();
+
+    expect(prisma.user.count).toBeCalledTimes(1);
+    expect(prisma.user.count).toBeCalledWith();
+  });
+
   it('should calls prisma.user.findMany', async () => {
     await service.handler();
 
@@ -76,13 +83,20 @@ describe('GetAllUsersController.js', () => {
     });
   });
 
-  it('should return an array with users object', async () => {
+  it('should return an object with paginate fields and users data', async () => {
     const users = ['user 1', 'user 2', 'user 3'];
 
+    prisma.user.count.mockResolvedValueOnce(600);
     prisma.user.findMany.mockResolvedValueOnce(users);
 
-    const output = await service.handler();
+    const output = await service.handler(15);
 
-    expect(output).toEqual(users);
+    expect(output).toEqual({
+      page: 15,
+      totalUsers: 600,
+      totalPages: 30,
+      perPage: 20,
+      users,
+    });
   });
 });

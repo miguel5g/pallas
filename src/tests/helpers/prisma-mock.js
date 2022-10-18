@@ -6,6 +6,7 @@ jest.mock('../../libs/prisma', () => {
     prisma: {
       user: {
         findMany: jest.fn(),
+        count: jest.fn(),
       },
     },
   };
