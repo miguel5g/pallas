@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "target": "es2020",
+    "baseUrl": "./src"
+  },
+  "module": {
+    "type": "commonjs"
+  }
+}
