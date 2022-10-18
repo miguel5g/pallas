@@ -8,7 +8,12 @@ class GetAllUsersController {
    * @param {GetAllUsersService} service
    */
   constructor(service) {
+    if (!service) {
+      throw new Error('Invalid service instance');
+    }
+
     this.#service = service;
+    this.handler = this.handler.bind(this);
   }
 
   /**
@@ -17,7 +22,13 @@ class GetAllUsersController {
    * @returns {Promise<void>}
    */
   async handler(request, response) {
-    return response.json({ message: 'Under construction' });
+    const { page: queryPage } = request.query;
+
+    const page = Array.isArray(queryPage) ? +queryPage[0] : +queryPage;
+
+    const users = await this.#service.handler(page);
+
+    return response.json(users);
   }
 }
 
