@@ -6,6 +6,7 @@ class CreateUserController {
 
   constructor(service) {
     this.#service = service;
+    this.handler = this.handler.bind(this);
   }
 
   /**
