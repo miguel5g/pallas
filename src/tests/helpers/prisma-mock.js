@@ -5,8 +5,9 @@ jest.mock('../../libs/prisma', () => {
     __esModule: true,
     prisma: {
       user: {
-        findMany: jest.fn(),
         count: jest.fn(),
+        create: jest.fn(),
+        findMany: jest.fn(),
       },
     },
   };
