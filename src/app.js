@@ -1,9 +1,11 @@
+import 'express-async-errors';
 import cors from 'cors';
 import express from 'express';
 import path from 'path';
 import url from 'url';
 
 import { routes } from './routes';
+import { HttpError } from './errors';
 
 const dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -20,7 +22,13 @@ function appFactory() {
   app.use('/api', routes);
   app.use(express.static(path.join(dirname, '..', 'public')));
 
-  /** @todo: add error handler */
+  app.use((error, _request, response, _next) => {
+    if (error instanceof HttpError) {
+      return response.status(error.statusCode).json({ message: error.message });
+    }
+
+    return response.status(500).json({ message: 'Internal server error' });
+  });
 
   return app;
 }
