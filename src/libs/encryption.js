@@ -12,7 +12,7 @@ async function compareText(hash, text) {
 
   if (!text || typeof text !== 'string') throw new Error('Invalid text value');
 
-  return bcrypt.compare(hash, text);
+  return bcrypt.compare(text, hash);
 }
 
 /**
