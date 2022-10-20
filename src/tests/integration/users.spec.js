@@ -1,31 +1,34 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
-import { prisma } from '../../libs/prisma';
 import { appFactory } from '../../app';
+import { compareText, hashText } from '../../libs/encryption';
+import { prisma } from '../../libs/prisma';
 
 describe('/api/users', () => {
   const app = appFactory();
 
   beforeAll(async () => {
+    const password = await hashText('123456');
+
     await prisma.user.createMany({
       data: [
         {
           name: 'User',
           surname: 'One',
-          password: '123456',
+          password,
           email: 'mail.one@example.com',
         },
         {
           name: 'User',
           surname: 'Two',
-          password: '123456',
+          password,
           email: 'mail.two@example.com',
         },
         {
           name: 'User',
           surname: 'Three',
-          password: '123456',
+          password,
           email: 'mail.three@example.com',
         },
       ],
@@ -94,9 +97,11 @@ describe('/api/users', () => {
         },
       });
 
+      expect(compareText(user.password, input.password)).resolves.toBe(true);
       expect(user).toEqual({
         id: expect.any(String),
         ...input,
+        password: expect.any(String),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
