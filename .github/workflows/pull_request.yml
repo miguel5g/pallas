@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NODE_ENV: 'staging'
+      NODE_ENV: staging
+      SALT_ROUNDS: 10
 
     steps:
       - name: Checkout repository
