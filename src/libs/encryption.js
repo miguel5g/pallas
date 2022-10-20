@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = process.env.SALT_ROUNDS;
+const SALT_ROUNDS = +process.env.SALT_ROUNDS;
 
 /**
  * @param {string} hash
