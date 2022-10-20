@@ -46,7 +46,7 @@ describe('/api/users', () => {
       expect(response.statusCode).toBe(200);
     });
 
-    it('should returns json body with pagination fields and users data', async () => {
+    it('should returns json content with pagination fields and users data', async () => {
       const { body } = await request(app).get('/api/users');
 
       expect(body).toHaveProperty('page', 1);
@@ -61,6 +61,44 @@ describe('/api/users', () => {
         expect(user).toHaveProperty('surname', expect.any(String));
         expect(user).toHaveProperty('createdAt', expect.any(String));
         expect(user).toHaveProperty('updatedAt', expect.any(String));
+      });
+    });
+  });
+
+  describe('POST /', () => {
+    it('should returns json content with status 400 when passed body is invalid', async () => {
+      const response = await request(app).post('/api/users');
+
+      expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toHaveProperty('message', 'Invalid user body');
+    });
+
+    it('should returns json content with status 201 when passed body is valid', async () => {
+      const input = {
+        name: 'Hello',
+        surname: 'World',
+        email: 'hello@world.com',
+        password: '123456',
+      };
+
+      const response = await request(app).post('/api/users').send(input);
+
+      expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
+      expect(response.statusCode).toBe(201);
+      expect(response.body).toHaveProperty('message', 'User created successfully');
+
+      const user = await prisma.user.findFirst({
+        where: {
+          email: input.email,
+        },
+      });
+
+      expect(user).toEqual({
+        id: expect.any(String),
+        ...input,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
       });
     });
   });
