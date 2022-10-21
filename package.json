@@ -9,6 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "dotenv -e .env.test -- node database-test-connection.mjs && dotenv -e .env.test -- npm run prisma:deploy && dotenv -e .env.test -- jest -i -c jest-e2e.config.js",
+    "test:coverage": "jest --coverage",
     "build": "swc src --no-swcrc --config-file .swcrc.build -d dist",
     "build:watch": "swc src -w --no-swcrc --config-file .swcrc.build -d dist",
     "docker:up": "docker compose up -d",
