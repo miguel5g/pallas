@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = +process.env.SALT_ROUNDS;
-
 /**
  * @param {string} hash
  * @param {string} text
@@ -22,9 +20,11 @@ async function compareText(hash, text) {
 async function hashText(text) {
   if (!text || typeof text !== 'string') throw new Error('Invalid text value');
 
-  if (!SALT_ROUNDS) throw new Error('Invalid salt rounds');
+  const saltRounds = +process.env.SALT_ROUNDS;
 
-  return bcrypt.hash(text, SALT_ROUNDS);
+  if (!saltRounds) throw new Error('Invalid salt rounds');
+
+  return bcrypt.hash(text, saltRounds);
 }
 
 export { compareText, hashText };
