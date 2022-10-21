@@ -1,8 +1,8 @@
 import { HttpError } from './http-error';
 
 class BadRequestError extends HttpError {
-  constructor() {
-    super('Bad request', 400);
+  constructor(message) {
+    super(message || 'Bad request', 400);
   }
 }
 

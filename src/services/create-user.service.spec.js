@@ -2,9 +2,11 @@ import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals
 
 import '../tests/helpers/encryption-mock';
 import '../tests/helpers/prisma-mock';
+import { TestPrismaKnowError } from '../tests/helpers/prisma-client-mock';
 import * as encryption from '../libs/encryption';
 import { prisma } from '../libs/prisma';
 import { CreateUserService } from './create-user.service';
+import { BadRequestError } from '../errors';
 
 describe('services/CreateUser', () => {
   /** @type {CreateUserService} */
@@ -36,6 +38,23 @@ describe('services/CreateUser', () => {
 
     expect(prisma.user.create).toBeCalledTimes(1);
     expect(prisma.user.create).toBeCalledWith({ data: { ...user, password: expect.any(String) } });
+  });
+
+  it('should return BedRequestError if user with the received email already exists', async () => {
+    const user = {
+      name: 'User',
+      surname: 'One',
+      email: 'user.one@mail.com',
+      password: '123456',
+    };
+
+    encryption.hashText.mockResolvedValueOnce('any');
+    prisma.user.create.mockRejectedValueOnce(new TestPrismaKnowError('P2002'));
+
+    await service.handler(user).catch((error) => {
+      expect(error).toBeInstanceOf(BadRequestError);
+      expect(error.message).toBe('Email already exists');
+    });
   });
 
   it('should encrypt the password before sending to the database', async () => {
