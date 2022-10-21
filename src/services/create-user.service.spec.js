@@ -8,7 +8,7 @@ import { prisma } from '../libs/prisma';
 import { CreateUserService } from './create-user.service';
 import { BadRequestError } from '../errors';
 
-describe('services/CreateUser', () => {
+describe('services/create-user', () => {
   /** @type {CreateUserService} */
   let service;
 
@@ -40,7 +40,7 @@ describe('services/CreateUser', () => {
     expect(prisma.user.create).toBeCalledWith({ data: { ...user, password: expect.any(String) } });
   });
 
-  it('should return BedRequestError if user with the received email already exists', async () => {
+  it('should throws BedRequestError if user with the received email already exists', async () => {
     const user = {
       name: 'User',
       surname: 'One',
@@ -55,6 +55,15 @@ describe('services/CreateUser', () => {
       expect(error).toBeInstanceOf(BadRequestError);
       expect(error.message).toBe('Email already exists');
     });
+  });
+
+  it('should throws the original error if not prisma unique field constraint error', async () => {
+    const originalError = new Error('Any other error');
+
+    encryption.hashText.mockResolvedValueOnce('any');
+    prisma.user.create.mockRejectedValueOnce(originalError);
+
+    expect(service.handler({})).rejects.toBe(originalError);
   });
 
   it('should encrypt the password before sending to the database', async () => {
