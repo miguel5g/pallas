@@ -52,18 +52,22 @@ describe('/api/users', () => {
     it('should returns json content with pagination fields and users data', async () => {
       const { body } = await request(app).get('/api/users');
 
-      expect(body).toHaveProperty('page', 1);
-      expect(body).toHaveProperty('totalUsers', 3);
-      expect(body).toHaveProperty('totalPages', 1);
-      expect(body).toHaveProperty('perPage', 20);
-      expect(body).toHaveProperty('users', expect.any(Array));
+      expect(body).toEqual({
+        page: 1,
+        totalUsers: 3,
+        totalPages: 1,
+        perPage: 20,
+        users: expect.any(Array),
+      });
 
       body.users.forEach((user) => {
-        expect(user).toHaveProperty('id', expect.any(String));
-        expect(user).toHaveProperty('name', expect.any(String));
-        expect(user).toHaveProperty('surname', expect.any(String));
-        expect(user).toHaveProperty('createdAt', expect.any(String));
-        expect(user).toHaveProperty('updatedAt', expect.any(String));
+        expect(user).toEqual({
+          id: expect.any(String),
+          name: expect.any(String),
+          surname: expect.any(String),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+        });
       });
     });
   });
@@ -74,7 +78,7 @@ describe('/api/users', () => {
 
       expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
       expect(response.statusCode).toBe(400);
-      expect(response.body).toHaveProperty('message', 'Invalid user body');
+      expect(response.body).toEqual({ message: 'Invalid user body' });
     });
 
     it('should returns json content with status 201 when passed body is valid', async () => {
@@ -89,9 +93,9 @@ describe('/api/users', () => {
 
       expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
       expect(response.statusCode).toBe(201);
-      expect(response.body).toHaveProperty('message', 'User created successfully');
+      expect(response.body).toEqual({ message: 'User created successfully' });
 
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where: {
           email: input.email,
         },
@@ -101,6 +105,7 @@ describe('/api/users', () => {
       expect(user).toEqual({
         id: expect.any(String),
         ...input,
+        permissions: 0,
         password: expect.any(String),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
