@@ -1,4 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { z } from 'zod';
 
 import { CreateUserController } from './create-user.controller';
 import { CreateUserService } from '../services/create-user.service';
@@ -38,28 +39,25 @@ describe('controllers/CreateUser', () => {
     expect(controller.handler).toBeInstanceOf(Function);
   });
 
-  it('should return json body with status code 400 when request body is empty', async () => {
+  it('should throw an error when request body is empty', async () => {
     request.body = {};
 
-    await controller.handler(request, response);
-
-    expect(response.status).toBeCalledTimes(1);
-    expect(response.status).toBeCalledWith(400);
-    expect(response.json).toBeCalledTimes(1);
-    expect(response.json).toBeCalledWith({ message: 'Invalid user body' });
+    expect(controller.handler(request, response)).rejects.toBeInstanceOf(z.ZodError);
   });
 
-  it('should return json body with status code 400 when any property is invalid', async () => {
+  it('should throw an error when any property is invalid', async () => {
     {
       request.body = {
         ...user,
         surname: '',
       };
 
-      await controller.handler(request, response);
-
-      expect(response.status).toBeCalledWith(400);
-      expect(response.json).toBeCalledWith({ message: 'Invalid user body' });
+      controller.handler(request, response).catch((error) => {
+        expect(error).toBeInstanceOf(z.ZodError);
+        expect(error.issues).toHaveLength(1);
+        expect(error.issues[0].code).toBe('too_small');
+        expect(error.issues[0].path).toEqual(['surname']);
+      });
     }
     {
       request.body = {
@@ -67,10 +65,12 @@ describe('controllers/CreateUser', () => {
         email: undefined,
       };
 
-      await controller.handler(request, response);
-
-      expect(response.status).toBeCalledWith(400);
-      expect(response.json).toBeCalledWith({ message: 'Invalid user body' });
+      controller.handler(request, response).catch((error) => {
+        expect(error).toBeInstanceOf(z.ZodError);
+        expect(error.issues).toHaveLength(1);
+        expect(error.issues[0].code).toBe('invalid_type');
+        expect(error.issues[0].path).toEqual(['email']);
+      });
     }
   });
 
