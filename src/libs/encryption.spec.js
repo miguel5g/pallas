@@ -30,7 +30,16 @@ describe('libs/encryption', () => {
     });
 
     it("should throws an error if salt rounds isn't an number", async () => {
-      expect(hashText('valid')).rejects.toThrow('Invalid salt rounds');
+      {
+        process.env.SALT_ROUNDS = undefined;
+
+        expect(hashText('valid')).rejects.toThrow('Invalid salt rounds');
+      }
+      {
+        process.env.SALT_ROUNDS = 'text';
+
+        expect(hashText('valid')).rejects.toThrow('Invalid salt rounds');
+      }
     });
 
     it('should return an hashed string', async () => {
