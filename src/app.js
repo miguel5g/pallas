@@ -5,7 +5,7 @@ import path from 'path';
 import url from 'url';
 
 import { routes } from './routes';
-import { HttpError } from './errors';
+import { ErrorHandlerMiddleware } from './middlewares/error-handler.middleware';
 
 const dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -16,19 +16,13 @@ const dirname = path.dirname(url.fileURLToPath(import.meta.url));
  */
 function appFactory() {
   const app = express();
+  const errorHandlerMiddleware = new ErrorHandlerMiddleware();
 
   app.use(express.json());
   app.use(cors());
   app.use('/api', routes);
   app.use(express.static(path.join(dirname, '..', 'public')));
-
-  app.use((error, _request, response, _next) => {
-    if (error instanceof HttpError) {
-      return response.status(error.statusCode).json({ message: error.message });
-    }
-
-    return response.status(500).json({ message: 'Internal server error' });
-  });
+  app.use(errorHandlerMiddleware.handler);
 
   return app;
 }

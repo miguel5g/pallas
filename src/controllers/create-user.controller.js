@@ -1,4 +1,5 @@
 import { CreateUserService } from '../services/create-user.service';
+import { CreateUserSchema } from '../validators';
 
 class CreateUserController {
   /** @type {CreateUserService} */
@@ -17,15 +18,9 @@ class CreateUserController {
   async handler(request, response) {
     const { name, surname, email, password } = request.body;
 
-    /** @todo: improve body validation with zod */
+    const user = CreateUserSchema.parse({ name, surname, email, password });
 
-    if ([name, surname, email, password].some((value) => !value)) {
-      return response.status(400).json({ message: 'Invalid user body' });
-    }
-
-    /** @todo: improve error handler with try/catch */
-
-    await this.#service.handler({ name, surname, email, password });
+    await this.#service.handler(user);
 
     return response.status(201).json({ message: 'User created successfully' });
   }

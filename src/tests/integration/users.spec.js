@@ -78,7 +78,27 @@ describe('/api/users', () => {
 
       expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
       expect(response.statusCode).toBe(400);
-      expect(response.body).toEqual({ message: 'Invalid user body' });
+      expect(response.body).toEqual({
+        message: 'Invalid request body',
+        errors: [
+          {
+            code: 'invalid_type',
+            message: 'The "name" field must be a string',
+          },
+          {
+            code: 'invalid_type',
+            message: 'The "surname" field must be a string',
+          },
+          {
+            code: 'invalid_type',
+            message: 'The "password" field must be a string',
+          },
+          {
+            code: 'invalid_type',
+            message: 'The "email" field must be a string',
+          },
+        ],
+      });
     });
 
     it('should returns json content with status 201 when passed body is valid', async () => {
