@@ -5,7 +5,7 @@ import path from 'path';
 import url from 'url';
 
 import { routes } from './routes';
-import { ErrorHandlerMiddleware } from './middlewares/error-handler';
+import { ErrorHandlerMiddleware } from './middlewares/error-handler.middleware';
 
 const dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
