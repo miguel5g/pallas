@@ -14,18 +14,21 @@ describe('/api/users', () => {
     await prisma.user.createMany({
       data: [
         {
+          id: 'user.one',
           name: 'User',
           surname: 'One',
           password,
           email: 'mail.one@example.com',
         },
         {
+          id: 'user.two',
           name: 'User',
           surname: 'Two',
           password,
           email: 'mail.two@example.com',
         },
         {
+          id: 'user.three',
           name: 'User',
           surname: 'Three',
           password,
@@ -130,6 +133,29 @@ describe('/api/users', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
+    });
+  });
+
+  describe('GET /:id', () => {
+    it('should return user data with status 200', async () => {
+      const response = await request(app).get('/api/users/user.one');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        id: 'user.one',
+        name: 'User',
+        surname: 'One',
+        permissions: 0,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      });
+    });
+
+    it("should return an message and status 404 when user doesn't exists", async () => {
+      const response = await request(app).get('/api/users/invalid');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: 'User not found' });
     });
   });
 });

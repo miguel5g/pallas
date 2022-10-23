@@ -4,7 +4,7 @@ import '../tests/helpers/prisma-mock';
 import { prisma } from '../libs/prisma';
 import { GetAllUsersService } from './get-all-users.service';
 
-describe('services/get-all-users-service', () => {
+describe('services/get-all-users', () => {
   /** @type {GetAllUsersService} */
   let service;
 

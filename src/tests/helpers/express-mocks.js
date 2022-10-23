@@ -4,6 +4,7 @@ import { jest } from '@jest/globals';
 class TestRequest {
   body = {};
   query = {};
+  params = {};
 }
 
 /** @type {import('express').Response} */
