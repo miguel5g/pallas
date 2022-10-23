@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import { appFactory } from '../../app';
 import { compareText, hashText } from '../../libs/encryption';
 import { prisma } from '../../libs/prisma';
+import { encode } from '../../libs/token';
 
 describe('/api/users', () => {
   const app = appFactory();
@@ -45,15 +46,41 @@ describe('/api/users', () => {
   });
 
   describe('GET /', () => {
-    it('should returns json content type with status code 200', async () => {
+    it('should return unauthorized when user does not send token', async () => {
       const response = await request(app).get('/api/users');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
+    });
+
+    it('should return unauthorized when user does have correct permissions', async () => {
+      const token = encode({ id: 'admin', permissions: 0 });
+
+      const response = await request(app)
+        .get('/api/users')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
+    });
+
+    it('should returns json content type with status code 200', async () => {
+      const token = encode({ id: 'admin', permissions: 2 });
+
+      const response = await request(app)
+        .get('/api/users')
+        .set('Cookie', [`token=${token}`]);
 
       expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
       expect(response.statusCode).toBe(200);
     });
 
     it('should returns json content with pagination fields and users data', async () => {
-      const { body } = await request(app).get('/api/users');
+      const token = encode({ id: 'admin', permissions: 2 });
+
+      const { body } = await request(app)
+        .get('/api/users')
+        .set('Cookie', [`token=${token}`]);
 
       expect(body).toEqual({
         page: 1,
@@ -137,8 +164,30 @@ describe('/api/users', () => {
   });
 
   describe('GET /:id', () => {
+    it('should return unauthorized when user does not send token', async () => {
+      const response = await request(app).get('/api/users/user.two');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
+    });
+
+    it('should return unauthorized when user does have correct permissions', async () => {
+      const token = encode({ id: 'admin', permissions: 0 });
+
+      const response = await request(app)
+        .get('/api/users/user.two')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
+    });
+
     it('should return user data with status 200', async () => {
-      const response = await request(app).get('/api/users/user.one');
+      const token = encode({ id: 'admin', permissions: 2 });
+
+      const response = await request(app)
+        .get('/api/users/user.one')
+        .set('Cookie', [`token=${token}`]);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -152,7 +201,11 @@ describe('/api/users', () => {
     });
 
     it("should return an message and status 404 when user doesn't exists", async () => {
-      const response = await request(app).get('/api/users/invalid');
+      const token = encode({ id: 'admin', permissions: 2 });
+
+      const response = await request(app)
+        .get('/api/users/invalid')
+        .set('Cookie', [`token=${token}`]);
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: 'User not found' });
