@@ -2,7 +2,7 @@ import { HttpError } from './http-error';
 
 class NotFoundError extends HttpError {
   constructor(resource) {
-    super(`Resource "${resource}" not found`, 404);
+    super(`${resource} not found`, 404);
   }
 }
 

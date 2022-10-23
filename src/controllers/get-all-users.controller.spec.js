@@ -2,8 +2,9 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 
 import { GetAllUsersController } from './get-all-users.controller';
 import { GetAllUsersService } from '../services/get-all-users.service';
+import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
 
-describe('GetAllUsersController.js', () => {
+describe('controllers/get-all-users', () => {
   /** @type {GetAllUsersController} */
   let controller;
   /** @type {import('express').Request} */
@@ -18,8 +19,8 @@ describe('GetAllUsersController.js', () => {
   beforeEach(() => {
     controller = new GetAllUsersController(new GetAllUsersService());
 
-    request = { query: {} };
-    response = { json: jest.fn() };
+    request = new TestRequest();
+    response = new TestResponse();
   });
 
   afterEach(() => {
