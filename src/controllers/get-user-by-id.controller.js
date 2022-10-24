@@ -1,3 +1,5 @@
+import { UnauthorizedError } from '../errors';
+import { hasPermissions } from '../libs/permissions';
 import { GetUserByIdService } from '../services/get-user-by-id.service';
 
 class GetUserByIdController {
@@ -21,6 +23,12 @@ class GetUserByIdController {
    * @returns {Promise<void>}
    */
   async handler(request, response) {
+    const userPermissions = request.user?.permissions;
+
+    if (!userPermissions || !hasPermissions(userPermissions, ['READ_USER'])) {
+      throw new UnauthorizedError();
+    }
+
     const { id } = request.params;
 
     const user = await this.#service.handler(id);
