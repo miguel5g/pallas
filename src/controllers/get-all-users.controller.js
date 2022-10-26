@@ -1,3 +1,5 @@
+import { UnauthorizedError } from '../errors';
+import { hasPermissions } from '../libs/permissions';
 import { GetAllUsersService } from '../services/get-all-users.service';
 
 class GetAllUsersController {
@@ -22,6 +24,12 @@ class GetAllUsersController {
    * @returns {Promise<void>}
    */
   async handler(request, response) {
+    const userPermissions = request.user?.permissions;
+
+    if (!userPermissions || !hasPermissions(userPermissions, ['READ_USER'])) {
+      throw new UnauthorizedError();
+    }
+
     const { page: queryPage } = request.query;
 
     const page = Array.isArray(queryPage) ? +queryPage[0] : +queryPage;

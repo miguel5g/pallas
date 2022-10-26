@@ -3,6 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 import { GetUserByIdController } from './get-user-by-id.controller';
 import { GetUserByIdService } from '../services/get-user-by-id.service';
 import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
+import { UnauthorizedError } from '../errors';
 
 describe('controllers/get-user-by-id.js', () => {
   /** @type {GetUserByIdController} */
@@ -35,7 +36,25 @@ describe('controllers/get-user-by-id.js', () => {
     expect(() => new GetUserByIdController()).toThrow('Invalid service instance');
   });
 
+  it('should throw unauthorized error if not find user permissions', async () => {
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+  });
+
+  it('should throw an unauthorized error if the user does not have the correct permissions', async () => {
+    request.user = {
+      id: 'test',
+      permissions: 0,
+    };
+
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+  });
+
   it('should calls service.handler', async () => {
+    request.user = {
+      id: 'test',
+      permissions: 2,
+    };
+
     await controller.handler(request, response);
 
     expect(GetUserByIdService.prototype.handler).toBeCalledTimes(1);
@@ -43,6 +62,11 @@ describe('controllers/get-user-by-id.js', () => {
 
   it('should return a json body with user infos', async () => {
     request.params.id = 'user id';
+    request.user = {
+      id: 'test',
+      permissions: 2,
+    };
+
     const expectedOutput = {
       name: 'sample user',
     };

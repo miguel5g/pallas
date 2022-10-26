@@ -1,4 +1,5 @@
 import 'express-async-errors';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import path from 'path';
@@ -18,8 +19,9 @@ function appFactory() {
   const app = express();
   const errorHandlerMiddleware = new ErrorHandlerMiddleware();
 
-  app.use(express.json());
   app.use(cors());
+  app.use(express.json());
+  app.use(cookieParser());
   app.use('/api', routes);
   app.use(express.static(path.join(dirname, '..', 'public')));
   app.use(errorHandlerMiddleware.handler);
