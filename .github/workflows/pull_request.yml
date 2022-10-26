@@ -7,8 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DATABASE_NAME: 'staging'
+      DATABASE_PASSWORD: 'staging'
+      DATABASE_USER: 'staging'
+      DIGITAL_OCEAN_TOKEN: 'staging'
       NODE_ENV: staging
+      PORT: 4000
       SALT_ROUNDS: 10
+      SECRET: 'staging'
 
     steps:
       - name: Checkout repository
