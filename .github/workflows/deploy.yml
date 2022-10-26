@@ -26,4 +26,10 @@ jobs:
         run: docker push registry.digitalocean.com/todo-app/osiris:latest
 
       - name: Run release script
-        run: echo "${{ secrets.SSH_KEY }}" | ssh -i /dev/stdin ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} ~/release.sh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: ~/release.sh
