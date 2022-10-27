@@ -1,0 +1,35 @@
+name: Build image and deploy to digital ocean
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to te registry
+        run: docker login -u ${{ secrets.DIGITAL_OCEAN_TOKEN }} -p ${{ secrets.DIGITAL_OCEAN_TOKEN }} registry.digitalocean.com
+
+      - name: Build image
+        run: docker build -t osiris:latest .
+
+      - name: Tag image
+        run: docker tag osiris:latest registry.digitalocean.com/todo-app/osiris:latest
+
+      - name: Push image
+        run: docker push registry.digitalocean.com/todo-app/osiris:latest
+
+      - name: Run release script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: ~/release.sh

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "npm run prisma:deploy && node dist/index.js",
     "start:dev": "npm run build && concurrently \"npm run build:watch\" \"npm run start:watch\"",
     "start:watch": "nodemon --watch \"dist/**/*\" -e js ./dist/index.js",
     "test": "jest",
