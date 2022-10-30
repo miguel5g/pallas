@@ -50,7 +50,16 @@ describe('/api/users', () => {
       const response = await request(app).get('/api/users');
 
       expect(response.statusCode).toBe(401);
-      expect(response.body).toEqual({ message: 'Unauthorized' });
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return unauthorized when user send an invalid token', async () => {
+      const response = await request(app)
+        .get('/api/users')
+        .set('Cookie', ['token=invalid; Path=/']);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Your token is invalid' });
     });
 
     it('should return unauthorized when user does have correct permissions', async () => {
@@ -168,7 +177,16 @@ describe('/api/users', () => {
       const response = await request(app).get('/api/users/user.two');
 
       expect(response.statusCode).toBe(401);
-      expect(response.body).toEqual({ message: 'Unauthorized' });
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return unauthorized when user send an invalid token', async () => {
+      const response = await request(app)
+        .get('/api/users/user.two')
+        .set('Cookie', ['token=invalid; Path=/']);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Your token is invalid' });
     });
 
     it('should return unauthorized when user does have correct permissions', async () => {
