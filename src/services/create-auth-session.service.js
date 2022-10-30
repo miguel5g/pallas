@@ -4,7 +4,7 @@ import { prisma } from '../libs/prisma';
 import { encode } from '../libs/token';
 
 class CreateAuthSession {
-  async handler(email, password) {
+  async handler({ email, password }) {
     const user = await prisma.user.findUnique({
       where: { email },
       select: {

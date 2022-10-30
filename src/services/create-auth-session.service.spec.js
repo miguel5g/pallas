@@ -35,7 +35,7 @@ describe('services/create-user-auth', () => {
     encrypt.compareText.mockResolvedValueOnce(true);
     prisma.user.findUnique.mockResolvedValueOnce('user');
 
-    await service.handler();
+    await service.handler({});
 
     expect(prisma.user.findUnique).toBeCalledTimes(1);
   });
@@ -44,7 +44,12 @@ describe('services/create-user-auth', () => {
     encrypt.compareText.mockResolvedValueOnce(true);
     prisma.user.findUnique.mockResolvedValueOnce(mockUser);
 
-    await service.handler(mockUser.email, 'test');
+    const input = {
+      email: mockUser.email,
+      password: 'test',
+    };
+
+    await service.handler(input);
 
     expect(prisma.user.findUnique).toBeCalledWith({
       where: { email: mockUser.email },
@@ -57,25 +62,34 @@ describe('services/create-user-auth', () => {
   });
 
   it('should call the method compare text with the values passed', async () => {
-    const inputPassword = 'test';
-
     prisma.user.findUnique.mockResolvedValueOnce(mockUser);
     encrypt.compareText.mockResolvedValueOnce(true);
 
-    await service.handler(mockUser.email, inputPassword);
+    const input = {
+      email: mockUser.email,
+      password: 'test',
+    };
+
+    await service.handler(input);
 
     expect(encrypt.compareText).toBeCalledTimes(1);
-    expect(encrypt.compareText).toBeCalledWith(mockUser.password, inputPassword);
+    expect(encrypt.compareText).toBeCalledWith(mockUser.password, input.password);
   });
 
   it("should throw a not found error when the email passed doesn't exist", async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     prisma.user.findUnique.mockResolvedValueOnce(null);
 
-    await service.handler('any', 'any').catch((error) => {
+    const input = { email: 'any' };
+
+    await service.handler(input).catch((error) => {
       expect(error).toBeInstanceOf(NotFoundError);
       expect(error.message).toBe('User not found');
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { email: input.email },
+        select: expect.anything(),
+      });
     });
   });
 
