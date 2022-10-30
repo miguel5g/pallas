@@ -16,6 +16,7 @@ class CreateAuthSessionController {
     }
 
     this.#service = service;
+    this.handler = this.handler.bind(this);
   }
 
   /**
