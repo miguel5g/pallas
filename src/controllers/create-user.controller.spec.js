@@ -5,7 +5,7 @@ import { CreateUserController } from './create-user.controller';
 import { CreateUserService } from '../services/create-user.service';
 import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
 
-describe('controllers/CreateUser', () => {
+describe('controllers/create-user', () => {
   const user = {
     name: 'Hello',
     surname: 'World',
