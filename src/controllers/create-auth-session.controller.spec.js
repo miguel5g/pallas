@@ -11,7 +11,7 @@ import {
 import { z } from 'zod';
 
 import { CreateAuthSessionController } from './create-auth-session.controller';
-import { CreateAuthSession } from '../services/create-auth-session.service';
+import { CreateAuthSessionService } from '../services/create-auth-session.service';
 import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
 
 describe('controllers/create-auth-session', () => {
@@ -25,13 +25,13 @@ describe('controllers/create-auth-session', () => {
   let response;
 
   beforeAll(() => {
-    CreateAuthSession.prototype.handler = jest.fn();
+    CreateAuthSessionService.prototype.handler = jest.fn();
     jest.useFakeTimers().setSystemTime(systemTime);
   });
 
   beforeEach(() => {
     environment = process.env;
-    controller = new CreateAuthSessionController(new CreateAuthSession());
+    controller = new CreateAuthSessionController(new CreateAuthSessionService());
 
     request = new TestRequest();
     response = new TestResponse();
@@ -88,8 +88,8 @@ describe('controllers/create-auth-session', () => {
 
     await controller.handler(request, response);
 
-    expect(CreateAuthSession.prototype.handler).toBeCalledTimes(1);
-    expect(CreateAuthSession.prototype.handler).toBeCalledWith(credentials);
+    expect(CreateAuthSessionService.prototype.handler).toBeCalledTimes(1);
+    expect(CreateAuthSessionService.prototype.handler).toBeCalledWith(credentials);
   });
 
   it('should set response token cookie with service return', async () => {
@@ -98,7 +98,7 @@ describe('controllers/create-auth-session', () => {
       const credentials = { email: 'user.one@mail.com', password: '123456' };
       request.body = credentials;
 
-      CreateAuthSession.prototype.handler.mockResolvedValueOnce(tokenMock);
+      CreateAuthSessionService.prototype.handler.mockResolvedValueOnce(tokenMock);
 
       await controller.handler(request, response);
 
@@ -119,7 +119,7 @@ describe('controllers/create-auth-session', () => {
       const credentials = { email: 'user.one@mail.com', password: '123456' };
       request.body = credentials;
 
-      CreateAuthSession.prototype.handler.mockResolvedValueOnce(tokenMock);
+      CreateAuthSessionService.prototype.handler.mockResolvedValueOnce(tokenMock);
       process.env.NODE_ENV = 'production';
 
       await controller.handler(request, response);

@@ -1,4 +1,4 @@
-import { CreateAuthSession } from '../services/create-auth-session.service';
+import { CreateAuthSessionService } from '../services/create-auth-session.service';
 import { CredentialsSchema } from '../validators';
 
 const ONE_SECOND_IN_MS = 1000;
@@ -9,9 +9,9 @@ const ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 24;
 class CreateAuthSessionController {
   #service;
 
-  /** @type {CreateAuthSession} */
+  /** @type {CreateAuthSessionService} */
   constructor(service) {
-    if (!service || !(service instanceof CreateAuthSession)) {
+    if (!service || !(service instanceof CreateAuthSessionService)) {
       throw new Error('Invalid service instance');
     }
 

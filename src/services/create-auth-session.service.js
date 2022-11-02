@@ -3,7 +3,7 @@ import { compareText } from '../libs/encryption';
 import { prisma } from '../libs/prisma';
 import { encode } from '../libs/token';
 
-class CreateAuthSession {
+class CreateAuthSessionService {
   async handler({ email, password }) {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -24,4 +24,4 @@ class CreateAuthSession {
   }
 }
 
-export { CreateAuthSession };
+export { CreateAuthSessionService };

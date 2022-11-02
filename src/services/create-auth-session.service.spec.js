@@ -6,7 +6,7 @@ import '../tests/helpers/token-mock';
 import * as token from '../libs/token';
 import * as encrypt from '../libs/encryption';
 import { prisma } from '../libs/prisma';
-import { CreateAuthSession } from './create-auth-session.service';
+import { CreateAuthSessionService } from './create-auth-session.service';
 import { NotFoundError, UnauthorizedError } from '../errors';
 
 describe('services/create-user-auth', () => {
@@ -16,11 +16,11 @@ describe('services/create-user-auth', () => {
     password: 'hashed',
     permissions: -1,
   };
-  /** @type {CreateAuthSession} */
+  /** @type {CreateAuthSessionService} */
   let service;
 
   beforeEach(() => {
-    service = new CreateAuthSession();
+    service = new CreateAuthSessionService();
   });
 
   afterEach(() => {
