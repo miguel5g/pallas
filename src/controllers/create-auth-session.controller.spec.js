@@ -93,13 +93,16 @@ describe('controllers/create-auth-session', () => {
   });
 
   it('should set response token cookie with service return', async () => {
+    const tokenMock = 'token-mock';
+    const credentials = { email: 'user.one@mail.com', password: '123456' };
+
+    request.body = credentials;
+
+    CreateAuthSessionService.prototype.handler
+      .mockResolvedValueOnce(tokenMock)
+      .mockResolvedValueOnce(tokenMock);
+
     {
-      const tokenMock = 'token-mock';
-      const credentials = { email: 'user.one@mail.com', password: '123456' };
-      request.body = credentials;
-
-      CreateAuthSessionService.prototype.handler.mockResolvedValueOnce(tokenMock);
-
       await controller.handler(request, response);
 
       expect(response.cookie).toBeCalledTimes(1);
@@ -115,11 +118,6 @@ describe('controllers/create-auth-session', () => {
       expect(response.json).toBeCalledWith({ message: 'Successfully authenticated' });
     }
     {
-      const tokenMock = 'token-mock';
-      const credentials = { email: 'user.one@mail.com', password: '123456' };
-      request.body = credentials;
-
-      CreateAuthSessionService.prototype.handler.mockResolvedValueOnce(tokenMock);
       process.env.NODE_ENV = 'production';
 
       await controller.handler(request, response);

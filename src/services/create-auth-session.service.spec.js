@@ -77,7 +77,7 @@ describe('services/create-user-auth', () => {
   });
 
   it("should throw a not found error when the email passed doesn't exist", async () => {
-    expect.assertions(3);
+    expect.assertions(2);
 
     prisma.user.findUnique.mockResolvedValueOnce(null);
 
@@ -86,10 +86,6 @@ describe('services/create-user-auth', () => {
     await service.handler(input).catch((error) => {
       expect(error).toBeInstanceOf(NotFoundError);
       expect(error.message).toBe('User not found');
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { email: input.email },
-        select: expect.anything(),
-      });
     });
   });
 
