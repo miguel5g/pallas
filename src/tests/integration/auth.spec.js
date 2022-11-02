@@ -7,7 +7,7 @@ import { prisma } from '../../libs/prisma';
 
 describe('/api/auth', () => {
   const app = appFactory();
-  const systemTime = new Date(2022, 9, 29, 12);
+  const systemTime = Date.UTC(2022, 9, 29, 12);
 
   beforeAll(async () => {
     jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] }).setSystemTime(systemTime);
@@ -78,7 +78,7 @@ describe('/api/auth', () => {
       expect(response.body).toEqual({ message: 'Successfully authenticated' });
       expect(response.headers['set-cookie']).toHaveLength(1);
       expect(response.headers['set-cookie'][0]).toMatch(
-        /^token=.+\..+\..+;\sPath=\/; Expires=Sun, 30 Oct 2022 15:00:00 GMT; HttpOnly$/
+        /^token=.+\..+\..+;\sPath=\/; Expires=Sun, 30 Oct 2022 12:00:00 GMT; HttpOnly$/
       );
     });
   });
