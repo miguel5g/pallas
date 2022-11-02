@@ -9,7 +9,7 @@ import { prisma } from '../libs/prisma';
 import { CreateAuthSessionService } from './create-auth-session.service';
 import { NotFoundError, UnauthorizedError } from '../errors';
 
-describe('services/create-user-auth', () => {
+describe('services/create-auth-session', () => {
   const mockUser = {
     id: 'hello world',
     email: 'user.one@mail.com',
