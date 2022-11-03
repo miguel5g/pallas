@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { DeleteAuthSessionController } from './delete-auth-session.controller';
 import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
 
-describe('controllers/create-user', () => {
+describe('controllers/delete-auth-session', () => {
   const systemTime = new Date(2022, 9, 29, 12);
   let environment;
   /** @type {DeleteAuthSessionController} */
@@ -20,7 +20,6 @@ describe('controllers/create-user', () => {
   beforeEach(() => {
     environment = process.env;
     controller = new DeleteAuthSessionController();
-
     request = new TestRequest();
     response = new TestResponse();
   });
