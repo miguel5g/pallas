@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { appFactory } from '../../app';
 import { hashText } from '../../libs/encryption';
 import { prisma } from '../../libs/prisma';
+import { encode } from '../../libs/token';
 
 describe('/api/auth', () => {
   const app = appFactory();
@@ -80,6 +81,25 @@ describe('/api/auth', () => {
       expect(response.headers['set-cookie'][0]).toMatch(
         /^token=.+\..+\..+;\sPath=\/; Expires=Sun, 30 Oct 2022 12:00:00 GMT; HttpOnly$/
       );
+    });
+  });
+
+  describe('DELETE /', () => {
+    it('should return unauthorized when user does not send token', async () => {
+      const response = await request(app).delete('/api/auth');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return a message and status 200 on successfully sign out', async () => {
+      const token = encode({ id: 'admin', permissions: 2 });
+      const response = await request(app)
+        .delete('/api/auth')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({ message: 'Session deleted successfully' });
     });
   });
 });
