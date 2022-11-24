@@ -7,6 +7,7 @@ import url from 'url';
 
 import { routes } from './routes';
 import { ErrorHandlerMiddleware } from './middlewares/error-handler.middleware';
+import { NotFoundMiddleware } from './middlewares/not-found.middleware';
 
 const dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -18,12 +19,14 @@ const dirname = path.dirname(url.fileURLToPath(import.meta.url));
 function appFactory() {
   const app = express();
   const errorHandlerMiddleware = new ErrorHandlerMiddleware();
+  const notFoundMiddleware = new NotFoundMiddleware();
 
   app.use(cors());
   app.use(express.json());
   app.use(cookieParser());
   app.use('/api', routes);
   app.use(express.static(path.join(dirname, '..', 'public')));
+  app.use('/api/*', notFoundMiddleware.handler);
   app.use(errorHandlerMiddleware.handler);
 
   return app;
