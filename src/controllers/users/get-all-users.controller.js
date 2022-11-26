@@ -1,6 +1,6 @@
-import { UnauthorizedError } from '../errors';
-import { hasPermissions } from '../libs/permissions';
-import { GetAllUsersService } from '../services/get-all-users.service';
+import { UnauthorizedError } from '../../errors';
+import { hasPermissions } from '../../libs/permissions';
+import { GetAllUsersService } from '../../services/users/get-all-users.service';
 
 class GetAllUsersController {
   /** @type {GetAllUsersService} */

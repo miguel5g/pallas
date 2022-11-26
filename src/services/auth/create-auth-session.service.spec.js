@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals';
 
-import '../tests/helpers/encryption-mock';
-import '../tests/helpers/prisma-mock';
-import '../tests/helpers/token-mock';
-import * as token from '../libs/token';
-import * as encrypt from '../libs/encryption';
-import { prisma } from '../libs/prisma';
+import '../../tests/helpers/encryption-mock';
+import '../../tests/helpers/prisma-mock';
+import '../../tests/helpers/token-mock';
+import * as token from '../../libs/token';
+import * as encrypt from '../../libs/encryption';
+import { prisma } from '../../libs/prisma';
 import { CreateAuthSessionService } from './create-auth-session.service';
-import { NotFoundError, UnauthorizedError } from '../errors';
+import { NotFoundError, UnauthorizedError } from '../../errors';
 
 describe('services/create-auth-session', () => {
   const mockUser = {

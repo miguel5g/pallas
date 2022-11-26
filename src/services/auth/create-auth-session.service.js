@@ -1,7 +1,7 @@
-import { NotFoundError, UnauthorizedError } from '../errors';
-import { compareText } from '../libs/encryption';
-import { prisma } from '../libs/prisma';
-import { encode } from '../libs/token';
+import { NotFoundError, UnauthorizedError } from '../../errors';
+import { compareText } from '../../libs/encryption';
+import { prisma } from '../../libs/prisma';
+import { encode } from '../../libs/token';
 
 class CreateAuthSessionService {
   async handler({ email, password }) {

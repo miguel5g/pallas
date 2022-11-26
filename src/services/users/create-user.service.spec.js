@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals';
 
-import '../tests/helpers/encryption-mock';
-import '../tests/helpers/prisma-mock';
-import { TestPrismaKnowError } from '../tests/helpers/prisma-client-mock';
-import * as encryption from '../libs/encryption';
-import { prisma } from '../libs/prisma';
+import '../../tests/helpers/encryption-mock';
+import '../../tests/helpers/prisma-mock';
+import { TestPrismaKnowError } from '../../tests/helpers/prisma-client-mock';
+import * as encryption from '../../libs/encryption';
+import { prisma } from '../../libs/prisma';
 import { CreateUserService } from './create-user.service';
-import { BadRequestError } from '../errors';
+import { BadRequestError } from '../../errors';
 
 describe('services/create-user', () => {
   /** @type {CreateUserService} */

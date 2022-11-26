@@ -1,9 +1,9 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { GetUserByIdController } from './get-user-by-id.controller';
-import { GetUserByIdService } from '../services/get-user-by-id.service';
-import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
-import { UnauthorizedError } from '../errors';
+import { GetUserByIdService } from '../../services/users/get-user-by-id.service';
+import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
+import { UnauthorizedError } from '../../errors';
 
 describe('controllers/get-user-by-id.js', () => {
   /** @type {GetUserByIdController} */

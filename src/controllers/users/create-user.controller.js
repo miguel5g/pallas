@@ -1,5 +1,5 @@
-import { CreateUserService } from '../services/create-user.service';
-import { CreateUserSchema } from '../validators';
+import { CreateUserService } from '../../services/users/create-user.service';
+import { CreateUserSchema } from '../../validators';
 
 class CreateUserController {
   /** @type {CreateUserService} */

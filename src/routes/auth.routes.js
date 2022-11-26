@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import { CreateAuthSessionController } from '../controllers/create-auth-session.controller';
-import { DeleteAuthSessionController } from '../controllers/delete-auth-session.controller';
+import { CreateAuthSessionController } from '../controllers/auth/create-auth-session.controller';
+import { DeleteAuthSessionController } from '../controllers/auth/delete-auth-session.controller';
 import { ProtectedRouteMiddleware } from '../middlewares/protected-route.middleware';
-import { CreateAuthSessionService } from '../services/create-auth-session.service';
+import { CreateAuthSessionService } from '../services/auth/create-auth-session.service';
 
 const authRoutes = Router();
 

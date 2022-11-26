@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 
 import { DeleteAuthSessionController } from './delete-auth-session.controller';
-import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
+import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
 describe('controllers/delete-auth-session', () => {
   const systemTime = new Date(2022, 9, 29, 12);

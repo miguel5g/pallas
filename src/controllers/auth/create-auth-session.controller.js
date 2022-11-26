@@ -1,5 +1,5 @@
-import { CreateAuthSessionService } from '../services/create-auth-session.service';
-import { CredentialsSchema } from '../validators';
+import { CreateAuthSessionService } from '../../services/auth/create-auth-session.service';
+import { CredentialsSchema } from '../../validators';
 
 const ONE_SECOND_IN_MS = 1000;
 const ONE_MINUTE_IN_MS = ONE_SECOND_IN_MS * 60;

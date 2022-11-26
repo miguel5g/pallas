@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals';
 
-import '../tests/helpers/prisma-mock';
-import { prisma } from '../libs/prisma';
+import '../../tests/helpers/prisma-mock';
+import { prisma } from '../../libs/prisma';
 import { GetUserByIdService } from './get-user-by-id.service';
-import { NotFoundError } from '../errors';
+import { NotFoundError } from '../../errors';
 
 describe('services/get-user-by-id', () => {
   /** @type {GetUserByIdService} */

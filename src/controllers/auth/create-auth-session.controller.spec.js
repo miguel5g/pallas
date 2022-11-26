@@ -11,8 +11,8 @@ import {
 import { z } from 'zod';
 
 import { CreateAuthSessionController } from './create-auth-session.controller';
-import { CreateAuthSessionService } from '../services/create-auth-session.service';
-import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
+import { CreateAuthSessionService } from '../../services/auth/create-auth-session.service';
+import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
 describe('controllers/create-auth-session', () => {
   const systemTime = new Date(2022, 9, 29, 12);
