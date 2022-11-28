@@ -1,5 +1,5 @@
-import { NotFoundError } from '../errors';
-import { prisma } from '../libs/prisma';
+import { NotFoundError } from '../../errors';
+import { prisma } from '../../libs/prisma';
 
 class GetUserByIdService {
   async handler(id) {

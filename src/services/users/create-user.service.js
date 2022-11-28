@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
 
-import { BadRequestError } from '../errors';
-import { hashText } from '../libs/encryption';
-import { prisma } from '../libs/prisma';
+import { BadRequestError } from '../../errors';
+import { hashText } from '../../libs/encryption';
+import { prisma } from '../../libs/prisma';
 
 class CreateUserService {
   async handler({ name, surname, email, password }) {

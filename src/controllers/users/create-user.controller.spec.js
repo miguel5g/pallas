@@ -2,8 +2,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 import { z } from 'zod';
 
 import { CreateUserController } from './create-user.controller';
-import { CreateUserService } from '../services/create-user.service';
-import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
+import { CreateUserService } from '../../services/users/create-user.service';
+import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
 describe('controllers/create-user', () => {
   const user = {

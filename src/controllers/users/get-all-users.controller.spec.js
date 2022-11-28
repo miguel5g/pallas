@@ -1,9 +1,9 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { GetAllUsersController } from './get-all-users.controller';
-import { GetAllUsersService } from '../services/get-all-users.service';
-import { TestRequest, TestResponse } from '../tests/helpers/express-mocks';
-import { UnauthorizedError } from '../errors';
+import { GetAllUsersService } from '../../services/users/get-all-users.service';
+import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
+import { UnauthorizedError } from '../../errors';
 
 describe('controllers/get-all-users', () => {
   /** @type {GetAllUsersController} */

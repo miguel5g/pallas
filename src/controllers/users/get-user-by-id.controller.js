@@ -1,6 +1,6 @@
-import { UnauthorizedError } from '../errors';
-import { hasPermissions } from '../libs/permissions';
-import { GetUserByIdService } from '../services/get-user-by-id.service';
+import { UnauthorizedError } from '../../errors';
+import { hasPermissions } from '../../libs/permissions';
+import { GetUserByIdService } from '../../services/users/get-user-by-id.service';
 
 class GetUserByIdController {
   #service;
