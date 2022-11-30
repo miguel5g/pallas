@@ -4,7 +4,7 @@ services:
   test-database:
     image: postgres:14
     restart: always
-    container_name: integration-tests
+    container_name: e2e-tests
     profiles:
       - cli-only
     ports:
