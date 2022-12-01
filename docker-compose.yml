@@ -1,18 +1,6 @@
 version: '3.9'
 
 services:
-  test-database:
-    image: postgres:14
-    restart: always
-    container_name: e2e-tests
-    profiles:
-      - cli-only
-    ports:
-      - '5433:5432'
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-
   osiris:
     image: registry.digitalocean.com/todo-app/osiris:latest
     restart: always
