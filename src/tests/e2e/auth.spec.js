@@ -27,6 +27,7 @@ describe('/api/auth', () => {
 
   afterAll(async () => {
     jest.useRealTimers();
+
     await prisma.user.deleteMany();
 
     await prisma.$disconnect();
