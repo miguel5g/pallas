@@ -27,7 +27,7 @@ jobs:
         run: npm run test
 
       - name: Setup docker compose
-        run: docker-compose up -d test-database
+        run: npm run docker:tests:up
 
       - name: Run end to end tests
         run: npm run test:e2e
