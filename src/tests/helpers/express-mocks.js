@@ -5,6 +5,7 @@ class TestRequest {
   body = {};
   query = {};
   params = {};
+  user = {};
 }
 
 /** @type {import('express').Response} */
