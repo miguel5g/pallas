@@ -105,4 +105,78 @@ describe('/api/todos', () => {
       ]);
     });
   });
+
+  describe('POST /', () => {
+    it('should return unauthorized when user is not logged in', async () => {
+      const response = await request(app).post('/api/todos');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should returns 400 when request body is invalid', async () => {
+      expect.assertions(4);
+
+      const token = encode({ id: 'user.one', permissions: 0 });
+
+      {
+        const response = await request(app)
+          .post('/api/todos')
+          .set('Cookie', [`token=${token}`])
+          .send({});
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({
+          message: 'Invalid request body',
+          errors: [
+            {
+              code: 'invalid_type',
+              message: 'The "title" field must be a string',
+            },
+          ],
+        });
+      }
+      {
+        const response = await request(app)
+          .post('/api/todos')
+          .set('Cookie', [`token=${token}`])
+          .send({ title: 'ma' });
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({
+          message: 'Invalid request body',
+          errors: [
+            {
+              code: 'too_small',
+              message: 'The minimum length of the "title" field is 6 characters',
+            },
+          ],
+        });
+      }
+    });
+
+    it('must create the todo and connect it to its author', async () => {
+      const token = encode({ id: 'user.one', permissions: 0 });
+      const input = { title: 'Make a cake' };
+
+      const response = await request(app)
+        .post('/api/todos')
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.statusCode).toBe(201);
+      expect(response.body).toEqual({ message: 'Todo successfully created' });
+
+      const todo = await prisma.todo.findFirst({ where: input });
+
+      expect(todo).toEqual({
+        id: expect.any(String),
+        title: input.title,
+        status: 'TODO',
+        authorId: 'user.one',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
+  });
 });
