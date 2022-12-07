@@ -1,9 +1,9 @@
 import { HttpError } from './http-error';
-import { statusCodes } from './status-codes';
+import { StatusCodes } from './status-codes';
 
 class InternalServerError extends HttpError {
   constructor() {
-    super('Internal server error', statusCodes.INTERNAL_ERROR);
+    super('Internal server error', StatusCodes.INTERNAL_ERROR);
   }
 }
 

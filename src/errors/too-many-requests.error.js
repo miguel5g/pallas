@@ -1,9 +1,9 @@
 import { HttpError } from './http-error';
-import { statusCodes } from './status-codes';
+import { StatusCodes } from './status-codes';
 
 class TooManyRequestsError extends HttpError {
   constructor() {
-    super('Too many requests', statusCodes.TOO_MANY_REQUESTS);
+    super('Too many requests', StatusCodes.TOO_MANY_REQUESTS);
   }
 }
 

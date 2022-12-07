@@ -1,9 +1,9 @@
 import { HttpError } from './http-error';
-import { statusCodes } from './status-codes';
+import { StatusCodes } from './status-codes';
 
 class NotFoundError extends HttpError {
   constructor(resource) {
-    super(`${resource} not found`, statusCodes.NOT_FOUND);
+    super(`${resource} not found`, StatusCodes.NOT_FOUND);
   }
 }
 

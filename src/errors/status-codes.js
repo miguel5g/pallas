@@ -10,4 +10,4 @@ const StatusCodes = {
   NOT_IMPLEMENTED: 501, 
 }
 
-export { statusCodes }
+export { StatusCodes }

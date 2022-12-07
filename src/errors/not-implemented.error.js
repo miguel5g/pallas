@@ -1,9 +1,9 @@
 import { HttpError } from './http-error';
-import { statusCodes } from './status-codes';
+import { StatusCodes } from './status-codes';
 
 class NotImplementedError extends HttpError {
   constructor() {
-    super('Not implemented', statusCodes.NOT_IMPLEMENTED);
+    super('Not implemented', StatusCodes.NOT_IMPLEMENTED);
   }
 }
 
