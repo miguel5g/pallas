@@ -4,7 +4,7 @@ import '../../tests/helpers/prisma-mock';
 import { prisma } from '../../libs/prisma';
 import { CreateTodoService } from './create-todo.service';
 
-describe('services/get-all-todos', () => {
+describe('services/create-todo', () => {
   /** @type {CreateTodoService} */
   let service;
 

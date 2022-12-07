@@ -5,7 +5,7 @@ import { CreateTodoController } from './create-todo.controller';
 import { CreateTodoService } from '../../services/todos/create-todo.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
-describe('controllers/get-all-todos', () => {
+describe('controllers/create-todo', () => {
   /** @type {CreateTodoController} */
   let controller;
   /** @type {import('express').Request} */
