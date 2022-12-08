@@ -10,7 +10,7 @@ jest.mock('../../libs/prisma', () => {
         findMany: jest.fn(),
         findUnique: jest.fn(),
       },
-      todo: {
+      task: {
         count: jest.fn(),
         create: jest.fn(),
         findMany: jest.fn(),
