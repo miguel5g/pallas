@@ -6,6 +6,7 @@ class TestRequest {
   query = {};
   params = {};
   user = {};
+  cookies = {}
 }
 
 /** @type {import('express').Response} */
