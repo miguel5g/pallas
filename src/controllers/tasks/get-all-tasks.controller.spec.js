@@ -1,11 +1,11 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import { GetAllTodosController } from './get-all-todos.controller';
-import { GetAllTodosService } from '../../services/todos/get-all-todos.service';
+import { GetAllTasksController } from './get-all-tasks.controller';
+import { GetAllTasksService } from '../../services/tasks/get-all-tasks.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
-describe('controllers/get-all-todos', () => {
-  /** @type {GetAllTodosController} */
+describe('controllers/get-all-tasks', () => {
+  /** @type {GetAllTasksController} */
   let controller;
   /** @type {import('express').Request} */
   let request;
@@ -13,11 +13,11 @@ describe('controllers/get-all-todos', () => {
   let response;
 
   beforeAll(() => {
-    GetAllTodosService.prototype.handler = jest.fn();
+    GetAllTasksService.prototype.handler = jest.fn();
   });
 
   beforeEach(() => {
-    controller = new GetAllTodosController(new GetAllTodosService());
+    controller = new GetAllTasksController(new GetAllTasksService());
 
     request = new TestRequest();
     response = new TestResponse();
@@ -32,7 +32,7 @@ describe('controllers/get-all-todos', () => {
   });
 
   it('should throw an error if not pass service to controller constructor', () => {
-    expect(() => new GetAllTodosController()).toThrow('Invalid service instance');
+    expect(() => new GetAllTasksController()).toThrow('Invalid service instance');
   });
 
   it('should calls service with user id', async () => {
@@ -44,16 +44,16 @@ describe('controllers/get-all-todos', () => {
 
     await controller.handler(request, response);
 
-    expect(GetAllTodosService.prototype.handler).toBeCalledWith(expected);
+    expect(GetAllTasksService.prototype.handler).toBeCalledWith(expected);
   });
 
   it('should calls json with service output', async () => {
-    const expected = 'todos';
+    const expected = 'tasks';
 
-    GetAllTodosService.prototype.handler.mockResolvedValueOnce(expected);
+    GetAllTasksService.prototype.handler.mockResolvedValueOnce(expected);
 
     await controller.handler(request, response);
 
-    expect(response.json).toBeCalledWith({ todos: expected });
+    expect(response.json).toBeCalledWith({ tasks: expected });
   });
 });

@@ -14,26 +14,26 @@ model User {
   email       String   @unique
   password    String
   permissions Int      @default(0)
-  todos       Todo[]
+  tasks       Task[]
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
 
-model Todo {
+model Task {
   id        String     @id @default(uuid())
   title     String
-  status    TodoStatus @default(TODO)
+  status    TaskStatus @default(TODO)
   authorId  String     @map("author_id")
   author    User       @relation(fields: [authorId], references: [id])
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
 
-  @@map("todos")
+  @@map("tasks")
 }
 
-enum TodoStatus {
+enum TaskStatus {
   TODO
   DOING
   DONE

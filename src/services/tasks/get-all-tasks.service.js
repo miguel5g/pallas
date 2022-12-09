@@ -1,8 +1,8 @@
 import { prisma } from '../../libs/prisma';
 
-class GetAllTodosService {
+class GetAllTasksService {
   async handler(id) {
-    const todos = await prisma.todo.findMany({
+    const tasks = await prisma.task.findMany({
       where: {
         authorId: id,
       },
@@ -15,8 +15,8 @@ class GetAllTodosService {
       },
     });
 
-    return todos;
+    return tasks;
   }
 }
 
-export { GetAllTodosService };
+export { GetAllTasksService };

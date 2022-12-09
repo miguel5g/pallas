@@ -2,14 +2,14 @@ import { afterEach, beforeEach, describe, expect, jest, it } from '@jest/globals
 
 import '../../tests/helpers/prisma-mock';
 import { prisma } from '../../libs/prisma';
-import { GetAllTodosService } from './get-all-todos.service';
+import { GetAllTasksService } from './get-all-tasks.service';
 
-describe('services/get-all-todos', () => {
-  /** @type {GetAllTodosService} */
+describe('services/get-all-tasks', () => {
+  /** @type {GetAllTasksService} */
   let service;
 
   beforeEach(() => {
-    service = new GetAllTodosService();
+    service = new GetAllTasksService();
   });
 
   afterEach(() => {
@@ -20,13 +20,13 @@ describe('services/get-all-todos', () => {
     expect(service.handler).toBeDefined();
   });
 
-  it('should calls prisma.todo.findMany', async () => {
+  it('should calls prisma.task.findMany', async () => {
     const input = 'user id';
 
     await service.handler(input);
 
-    expect(prisma.todo.findMany).toBeCalledTimes(1);
-    expect(prisma.todo.findMany).toBeCalledWith({
+    expect(prisma.task.findMany).toBeCalledTimes(1);
+    expect(prisma.task.findMany).toBeCalledWith({
       where: {
         authorId: input,
       },
@@ -34,10 +34,10 @@ describe('services/get-all-todos', () => {
     });
   });
 
-  it('should use select field to filter todo fields', async () => {
+  it('should use select to filter task fields', async () => {
     await service.handler();
 
-    expect(prisma.todo.findMany).toBeCalledWith({
+    expect(prisma.task.findMany).toBeCalledWith({
       where: expect.any(Object),
       select: {
         id: true,
@@ -49,10 +49,10 @@ describe('services/get-all-todos', () => {
     });
   });
 
-  it('should return all todos', async () => {
-    const expected = ['todo 1', 'todo 2', 'todo 3'];
+  it('should return all tasks', async () => {
+    const expected = ['task 1', 'task 2', 'task 3'];
 
-    prisma.todo.findMany.mockResolvedValueOnce(expected);
+    prisma.task.findMany.mockResolvedValueOnce(expected);
 
     const output = await service.handler();
 

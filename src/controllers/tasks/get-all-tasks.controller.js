@@ -1,14 +1,14 @@
-import { GetAllTodosService } from '../../services/todos/get-all-todos.service';
+import { GetAllTasksService } from '../../services/tasks/get-all-tasks.service';
 
-class GetAllTodosController {
-  /** @type {GetAllTodosService} */
+class GetAllTasksController {
+  /** @type {GetAllTasksService} */
   #service;
 
   /**
-   * @param {GetAllTodosService} service
+   * @param {GetAllTasksService} service
    */
   constructor(service) {
-    if (!service) {
+    if (!service || !(service instanceof GetAllTasksService)) {
       throw new Error('Invalid service instance');
     }
 
@@ -24,12 +24,12 @@ class GetAllTodosController {
   async handler(request, response) {
     const { id } = request.user;
 
-    const todos = await this.#service.handler(id);
+    const tasks = await this.#service.handler(id);
 
     return response.json({
-      todos,
+      tasks,
     });
   }
 }
 
-export { GetAllTodosController };
+export { GetAllTasksController };

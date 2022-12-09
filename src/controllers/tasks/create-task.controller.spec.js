@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { ZodError } from 'zod';
 
-import { CreateTodoController } from './create-todo.controller';
-import { CreateTodoService } from '../../services/todos/create-todo.service';
+import { CreateTaskController } from './create-task.controller';
+import { CreateTaskService } from '../../services/tasks/create-task.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
 
-describe('controllers/create-todo', () => {
-  /** @type {CreateTodoController} */
+describe('controllers/create-task', () => {
+  /** @type {CreateTaskController} */
   let controller;
   /** @type {import('express').Request} */
   let request;
@@ -14,11 +14,11 @@ describe('controllers/create-todo', () => {
   let response;
 
   beforeAll(() => {
-    CreateTodoService.prototype.handler = jest.fn();
+    CreateTaskService.prototype.handler = jest.fn();
   });
 
   beforeEach(() => {
-    controller = new CreateTodoController(new CreateTodoService());
+    controller = new CreateTaskController(new CreateTaskService());
 
     request = new TestRequest();
     response = new TestResponse();
@@ -33,16 +33,16 @@ describe('controllers/create-todo', () => {
   });
 
   it('should throw an error if not pass service to controller constructor', () => {
-    expect(() => new CreateTodoController()).toThrow('Invalid service instance');
+    expect(() => new CreateTaskController()).toThrow('Invalid service instance');
   });
 
-  it('should throw an error if todo title is less than three characters', async () => {
+  it('should throw an error if task title is less than three characters', async () => {
     request.body = { title: 'hi' };
 
     expect(controller.handler(request, response)).rejects.toBeInstanceOf(ZodError);
   });
 
-  it('should throw an error if todo title is longer than one thousand and twenty eight characters', async () => {
+  it('should throw an error if task title is longer than one thousand and twenty eight characters', async () => {
     request.body = { title: Array.from({ length: 129 }, () => 'a') };
 
     expect(controller.handler(request, response)).rejects.toBeInstanceOf(ZodError);
@@ -50,25 +50,25 @@ describe('controllers/create-todo', () => {
 
   it('should calls service with user id and request body', async () => {
     const user = { id: 'user id' };
-    const todo = { title: 'Hello World' };
+    const task = { title: 'Hello World' };
 
     request.user = user;
-    request.body = todo;
+    request.body = task;
 
     await controller.handler(request, response);
 
-    expect(CreateTodoService.prototype.handler).toBeCalledWith({ ...todo, authorId: user.id });
+    expect(CreateTaskService.prototype.handler).toBeCalledWith({ ...task, authorId: user.id });
   });
 
   it('should calls json with service with success message', async () => {
     const user = { id: 'user id' };
-    const todo = { title: 'Hello World' };
+    const task = { title: 'Hello World' };
 
     request.user = user;
-    request.body = todo;
+    request.body = task;
 
     await controller.handler(request, response);
 
-    expect(response.json).toBeCalledWith({ message: 'Todo successfully created' });
+    expect(response.json).toBeCalledWith({ message: 'Task successfully created' });
   });
 });

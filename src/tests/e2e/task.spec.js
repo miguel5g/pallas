@@ -6,7 +6,7 @@ import { hashText } from '../../libs/encryption';
 import { prisma } from '../../libs/prisma';
 import { encode } from '../../libs/token';
 
-describe('/api/todos', () => {
+describe('/api/tasks', () => {
   const app = appFactory();
 
   beforeAll(async () => {
@@ -29,31 +29,31 @@ describe('/api/todos', () => {
       },
     ];
 
-    const todos = [
-      { id: 'todo.one', title: 'My first todo', authorId: 'user.one' },
-      { id: 'todo.two', title: 'My second todo', authorId: 'user.one' },
-      { id: 'todo.three', title: 'My third todo', authorId: 'user.two' },
-      { id: 'todo.four', title: 'My fourth todo', authorId: 'user.two' },
+    const tasks = [
+      { id: 'task.one', title: 'My first task', authorId: 'user.one' },
+      { id: 'task.two', title: 'My second task', authorId: 'user.one' },
+      { id: 'task.three', title: 'My third task', authorId: 'user.two' },
+      { id: 'task.four', title: 'My fourth task', authorId: 'user.two' },
     ];
 
     await prisma.user.createMany({ data: users });
-    await prisma.todo.createMany({ data: todos });
+    await prisma.task.createMany({ data: tasks });
   });
 
   afterAll(async () => {
     jest.useRealTimers();
 
-    const deleteTodos = prisma.todo.deleteMany();
+    const deleteTasks = prisma.task.deleteMany();
     const deleteUsers = prisma.user.deleteMany();
 
-    await prisma.$transaction([deleteTodos, deleteUsers]);
+    await prisma.$transaction([deleteTasks, deleteUsers]);
 
     await prisma.$disconnect();
   });
 
   describe('GET /', () => {
     it('should return unauthorized when user does not send token', async () => {
-      const response = await request(app).get('/api/todos');
+      const response = await request(app).get('/api/tasks');
 
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual({ message: 'Invalid token' });
@@ -61,7 +61,7 @@ describe('/api/todos', () => {
 
     it('should return unauthorized when user send an invalid token', async () => {
       const response = await request(app)
-        .get('/api/todos')
+        .get('/api/tasks')
         .set('Cookie', ['token=invalid; Path=/']);
 
       expect(response.statusCode).toBe(401);
@@ -72,32 +72,32 @@ describe('/api/todos', () => {
       const token = encode({ id: 'user.one', permissions: 0 });
 
       const response = await request(app)
-        .get('/api/todos')
+        .get('/api/tasks')
         .set('Cookie', [`token=${token}`]);
 
       expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
       expect(response.statusCode).toBe(200);
     });
 
-    it('should returns user todos array', async () => {
+    it('should returns user tasks array', async () => {
       const token = encode({ id: 'user.one', permissions: 0 });
 
       const { body } = await request(app)
-        .get('/api/todos')
+        .get('/api/tasks')
         .set('Cookie', [`token=${token}`]);
 
-      expect(body).toEqual({ todos: expect.any(Array) });
-      expect(body.todos).toEqual([
+      expect(body).toEqual({ tasks: expect.any(Array) });
+      expect(body.tasks).toEqual([
         {
-          id: 'todo.one',
-          title: 'My first todo',
+          id: 'task.one',
+          title: 'My first task',
           status: 'TODO',
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
         },
         {
-          id: 'todo.two',
-          title: 'My second todo',
+          id: 'task.two',
+          title: 'My second task',
           status: 'TODO',
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
@@ -108,7 +108,7 @@ describe('/api/todos', () => {
 
   describe('POST /', () => {
     it('should return unauthorized when user is not logged in', async () => {
-      const response = await request(app).post('/api/todos');
+      const response = await request(app).post('/api/tasks');
 
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual({ message: 'Invalid token' });
@@ -121,7 +121,7 @@ describe('/api/todos', () => {
 
       {
         const response = await request(app)
-          .post('/api/todos')
+          .post('/api/tasks')
           .set('Cookie', [`token=${token}`])
           .send({});
 
@@ -138,7 +138,7 @@ describe('/api/todos', () => {
       }
       {
         const response = await request(app)
-          .post('/api/todos')
+          .post('/api/tasks')
           .set('Cookie', [`token=${token}`])
           .send({ title: 'ma' });
 
@@ -155,21 +155,21 @@ describe('/api/todos', () => {
       }
     });
 
-    it('must create the todo and connect it to its author', async () => {
+    it('must create the task and connect it to its author', async () => {
       const token = encode({ id: 'user.one', permissions: 0 });
       const input = { title: 'Make a cake' };
 
       const response = await request(app)
-        .post('/api/todos')
+        .post('/api/tasks')
         .set('Cookie', [`token=${token}`])
         .send(input);
 
       expect(response.statusCode).toBe(201);
-      expect(response.body).toEqual({ message: 'Todo successfully created' });
+      expect(response.body).toEqual({ message: 'Task successfully created' });
 
-      const todo = await prisma.todo.findFirst({ where: input });
+      const task = await prisma.task.findFirst({ where: input });
 
-      expect(todo).toEqual({
+      expect(task).toEqual({
         id: expect.any(String),
         title: input.title,
         status: 'TODO',

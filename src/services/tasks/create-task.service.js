@@ -1,8 +1,8 @@
 import { prisma } from '../../libs/prisma';
 
-class CreateTodoService {
+class CreateTaskService {
   async handler({ title, authorId }) {
-    await prisma.todo.create({
+    await prisma.task.create({
       data: {
         title,
         authorId,
@@ -11,4 +11,4 @@ class CreateTodoService {
   }
 }
 
-export { CreateTodoService };
+export { CreateTaskService };
