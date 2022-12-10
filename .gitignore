@@ -4,7 +4,7 @@
 **/coverage
 
 # Files
-.env*
-!.env.example
-!.env.test
-*.local
+**/.env*
+**/!.env.example
+**/!.env.test
+**/*.local
