@@ -1,6 +1,9 @@
-name: Run unit and end to end test cases
+name: Run unit and end to end test cases (Loki)
 
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - 'loki/*'
 
 jobs:
   main:
@@ -21,15 +24,20 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: loki
 
       - name: Run unit tests
         run: npm run test
+        working-directory: loki
 
       - name: Setup docker compose
         run: npm run docker:tests:up
+        working-directory: loki
 
       - name: Run end to end tests
         run: npm run test:e2e
+        working-directory: loki
 
       - name: Build application
         run: npm run build
+        working-directory: loki
