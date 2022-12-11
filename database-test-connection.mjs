@@ -1,31 +1,23 @@
+import retry from 'retry';
 import { PrismaClient } from '@prisma/client';
-import { exit } from 'process';
 
 const prisma = new PrismaClient();
 
-let globalTimeout, nexTryTimeout;
-
 function connect() {
-  prisma
-    .$connect()
-    .then(() => {
-      clearTimeout(globalTimeout);
-      clearTimeout(nexTryTimeout);
-      console.log(`Connected to database on ${process.env.DATABASE_URL}`);
-      exit();
-    })
-    .catch(() => {
-      nexTryTimeout = setTimeout(() => {
-        console.log(`Trying to connect again to database on ${process.env.DATABASE_URL}`);
-        connect();
-      }, 1000);
-    });
+  const connection = retry.operation({
+    factor: 3,
+    retries: 10,
+    maxTimeout: 30 * 1000,
+  });
+
+  connection.attempt((currentAttempt) => {
+    console.log(`Trying to connect to database (attempt ${currentAttempt})`);
+
+    prisma
+      .$connect()
+      .then(() => console.log('Successfully connected'))
+      .catch((error) => connection.retry(error));
+  });
 }
 
 connect();
-
-globalTimeout = setTimeout(() => {
-  clearTimeout(nexTryTimeout);
-  console.log(`Unable to connect to database on ${process.env.DATABASE_URL}`);
-  exit(1);
-}, 10000);

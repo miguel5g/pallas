@@ -1,6 +1,6 @@
-# Todo App
+# Castiel
 
-Aplicação fullstack de todo list
+Taskfy API.
 
 ## :test_tube: Techs
 
@@ -34,10 +34,10 @@ npm install
 3. Configurar variáveis de ambiente:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.development
 ```
 
-_OBS: Preencher com suas variáveis de ambiente com a url do banco de dados PostgreSQL_
+_OBS: Preencher com suas variáveis de ambiente com a url do banco de dados MySQL_
 
 4. Executar projeto
 
@@ -45,12 +45,23 @@ _OBS: Preencher com suas variáveis de ambiente com a url do banco de dados Post
 npm run start:dev
 ```
 
-### Criando container Docker PostgreSQL
+### Criando e configurando container MySQL com Docker
+
+Para criar você pode utilizar o seguinte comando:
 
 ```bash
-docker run --name <container name> -p 5432:5432 -e POSTGRES_PASSWORD=<database password> -e POSTGRES_USER=<database user> -d postgres
-# Connection url: postgresql://<database user>:<database password>@localhost:5432/todo-app?schema=public
+docker run --name <container name> -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<password> -d mysql:8
 ```
+
+**Connection url:** `mysql://root:<password>@localhost:3306/<database name>`
+
+Para continuar com o desenvolvimento precisamos criar um shadow database para poder criar migrations.
+
+```bash
+docker exec -i <container name> mysql -uroot -p<password> <<< "CREATE DATABASE <database name>_shadow;"
+```
+
+**Shadow connection url:** `mysql://root:<password>@localhost:3306/<database name>_shadow`
 
 ## :sparkles: Contribuições
 
