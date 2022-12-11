@@ -1,6 +1,8 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
 
 import { appFactory } from './app';
+
+config({ path: '.env.development' });
 
 const app = appFactory();
 const PORT = process.env.PORT || 4000;
