@@ -3,33 +3,36 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
 }
 
 model User {
-  id          String   @id @default(uuid())
-  name        String
-  surname     String
-  email       String   @unique
-  password    String
+  id          String   @id @default(uuid()) @db.VarChar(255)
+  name        String   @db.VarChar(255)
+  surname     String   @db.VarChar(255)
+  email       String   @unique @db.VarChar(255)
+  password    String   @db.VarChar(255)
   permissions Int      @default(0)
   tasks       Task[]
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(dbgenerated("NOW()")) @map("created_at") @db.DateTime
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.DateTime
 
   @@map("users")
 }
 
 model Task {
-  id        String     @id @default(uuid())
-  title     String
+  id        String     @id @default(uuid()) @db.VarChar(255)
+  title     String     @db.VarChar(255)
+  authorId  String     @map("author_id") @db.VarChar(255)
   status    TaskStatus @default(TODO)
-  authorId  String     @map("author_id")
   author    User       @relation(fields: [authorId], references: [id])
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  createdAt DateTime   @default(dbgenerated("NOW()")) @map("created_at") @db.DateTime
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.DateTime
 
+  @@index([authorId])
   @@map("tasks")
 }
 
