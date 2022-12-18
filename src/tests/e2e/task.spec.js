@@ -106,6 +106,62 @@ describe('/api/tasks', () => {
     });
   });
 
+  describe('GET /:id', () => {
+    it('should return unauthorized when user does not send token', async () => {
+      const response = await request(app).get('/api/tasks/task.one');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return unauthorized when user send an invalid token', async () => {
+      const response = await request(app)
+        .get('/api/tasks/task.one')
+        .set('Cookie', ['token=invalid; Path=/']);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Your token is invalid' });
+    });
+
+    it('should returns not found if task does not exists', async () => {
+      const token = encode({ id: 'user.one', permissions: 0 });
+
+      const response = await request(app)
+        .get('/api/tasks/not-found')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual({ message: 'Task not found' });
+    });
+
+    it('should returns json content type with status code 200', async () => {
+      const token = encode({ id: 'user.one', permissions: 0 });
+
+      const response = await request(app)
+        .get('/api/tasks/task.one')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.headers).toHaveProperty('content-type', 'application/json; charset=utf-8');
+      expect(response.statusCode).toBe(200);
+    });
+
+    it('should returns requested task', async () => {
+      const token = encode({ id: 'user.one', permissions: 0 });
+
+      const { body } = await request(app)
+        .get('/api/tasks/task.one')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(body).toEqual({
+        id: 'task.one',
+        title: 'My first task',
+        status: 'TODO',
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      });
+    });
+  });
+
   describe('POST /', () => {
     it('should return unauthorized when user is not logged in', async () => {
       const response = await request(app).post('/api/tasks');
