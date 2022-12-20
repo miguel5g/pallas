@@ -16,6 +16,8 @@
     "docker:tests:down": "docker compose -f docker-compose.test.yml down",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:migrate": "dotenv -e .env.development -- prisma migrate dev",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
     "clean": "rm -rf dist"
   },
   "dependencies": {
