@@ -70,12 +70,13 @@ describe('controllers/update-task', () => {
   it('should calls service with task id and updated fields', async () => {
     const { id, ...task } = { id: 'task id', title: 'title updated' };
 
-    request.body = task;
     request.params = { id };
+    request.user = { id: 'user.one' };
+    request.body = task;
 
     await controller.handler(request, response);
 
-    expect(UpdateTaskService.prototype.handler).toBeCalledWith({ id, ...task });
+    expect(UpdateTaskService.prototype.handler).toBeCalledWith({ id, userId: 'user.one', ...task });
   });
 
   it('should calls json with service output', async () => {

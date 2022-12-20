@@ -1,19 +1,15 @@
-import { Prisma } from '@prisma/client';
-
 import { NotFoundError } from '../../errors';
 import { prisma } from '../../libs/prisma';
 
 class UpdateTaskService {
-  async handler({ id, ...data }) {
-    try {
-      prisma.task.update({ where: { id }, data });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-        throw new NotFoundError('Task');
-      }
+  async handler({ id, userId, ...data }) {
+    const task = await prisma.task.findFirst({ where: { AND: [{ id }, { authorId: userId }] } });
 
-      throw error;
+    if (task === null) {
+      throw new NotFoundError('Task');
     }
+
+    await prisma.task.update({ where: { id }, data });
   }
 }
 

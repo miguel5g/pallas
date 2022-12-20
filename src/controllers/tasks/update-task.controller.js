@@ -25,6 +25,7 @@ class UpdateTaskController {
    */
   async handler(request, response) {
     const { id } = request.params;
+    const { id: userId } = request.user;
     const { title, status } = request.body;
 
     if (status && !['TODO', 'DOING', 'DONE'].includes(status)) {
@@ -37,7 +38,7 @@ class UpdateTaskController {
       throw new BadRequestError('Invalid request body');
     }
 
-    await this.#service.handler({ id, ...task });
+    await this.#service.handler({ id, userId, ...task });
 
     return response.json({ message: 'Task successfully updated' });
   }
