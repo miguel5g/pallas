@@ -31,7 +31,6 @@ describe('libs/token', () => {
     });
 
     it('should return token payload', () => {
-      const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
       const input = jwt.sign({ hello: 'World' }, process.env.SECRET, { expiresIn: '1d' });
       const output = decode(input);
 

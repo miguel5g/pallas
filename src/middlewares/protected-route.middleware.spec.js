@@ -14,15 +14,12 @@ describe('middlewares/protected-route', () => {
   let request;
   /** @type {import('express').Response} */
   let response;
-  /** @type {import('express').NextFunction} */
-  let next;
 
   beforeAll(() => {
     middleware = new ProtectedRouteMiddleware();
 
     request = new TestRequest();
     response = new TestResponse();
-    next = jest.fn();
   });
 
   afterEach(() => {
@@ -83,11 +80,11 @@ describe('middlewares/protected-route', () => {
   it('should throw original error it is unknown', () => {
     expect.assertions(2);
 
-    const error = new Error('Unknown error');
+    const originalError = new Error('Unknown error');
     request.cookies = { token: 'any' };
 
     token.decode.mockImplementation(() => {
-      throw error;
+      throw originalError;
     });
 
     try {

@@ -7,7 +7,7 @@ const StatusCodes = {
   NOT_FOUND: 404,
   TOO_MANY_REQUESTS: 429,
   INTERNAL_ERROR: 500,
-  NOT_IMPLEMENTED: 501, 
-}
+  NOT_IMPLEMENTED: 501,
+};
 
-export { StatusCodes }
+export { StatusCodes };

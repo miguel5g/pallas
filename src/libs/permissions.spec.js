@@ -15,12 +15,8 @@ describe('libs/permissions', () => {
     });
 
     it('should throw an error on receiving an invalid permission', () => {
-      {
-        expect(() => calculatePermissions(null)).toThrow('Invalid permissions');
-      }
-      {
-        expect(() => calculatePermissions(['invalid'])).toThrow('Invalid permissions');
-      }
+      expect(() => calculatePermissions(null)).toThrow('Invalid permissions');
+      expect(() => calculatePermissions(['invalid'])).toThrow('Invalid permissions');
     });
 
     it('should return calculated permissions', () => {
@@ -40,12 +36,8 @@ describe('libs/permissions', () => {
     });
 
     it('should throw an error on receiving an invalid search permissions', () => {
-      {
-        expect(() => hasPermissions(5, null)).toThrow('Invalid search permissions');
-      }
-      {
-        expect(() => hasPermissions(5, ['invalid'])).toThrow('Invalid search permissions');
-      }
+      expect(() => hasPermissions(5, null)).toThrow('Invalid search permissions');
+      expect(() => hasPermissions(5, ['invalid'])).toThrow('Invalid search permissions');
     });
 
     it('should return true if the target has some of the searched permissions', () => {
