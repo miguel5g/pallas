@@ -235,4 +235,91 @@ describe('/api/tasks', () => {
       });
     });
   });
+
+  describe('PATCH /:id', () => {
+    const token = encode({ id: 'user.one', permissions: 0 });
+
+    it('should return unauthorized when user is not logged in', async () => {
+      const response = await request(app).patch('/api/tasks/task.one');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return 404 when the task does not exist', async () => {
+      const id = 'invalid';
+      const input = { title: 'updated title' };
+
+      const response = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('message', 'Task not found');
+    });
+
+    it('should return 404 when the task belongs to someone else', async () => {
+      const id = 'task.three';
+      const input = { title: 'updated title' };
+
+      const response = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('message', 'Task not found');
+    });
+
+    it('should return 400 if send an empty request body', async () => {
+      const id = 'task.one';
+      const input = {};
+
+      const response = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('message', 'Invalid request body');
+    });
+
+    it('should return 422 if send an invalid task status', async () => {
+      const id = 'task.one';
+      const input = { status: 'INVALID' };
+
+      const response = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.status).toBe(422);
+      expect(response.body).toHaveProperty('message', 'Invalid task status');
+    });
+
+    it('should update task on database', async () => {
+      const id = 'task.one';
+      const input = { status: 'DOING' };
+
+      const response = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`])
+        .send(input);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('message', 'Task successfully updated');
+
+      const task = await prisma.task.findUnique({ where: { id } });
+
+      expect(task).toEqual({
+        id: 'task.one',
+        title: 'My first task',
+        authorId: 'user.one',
+        status: 'DOING',
+        updatedAt: expect.any(Date),
+        createdAt: expect.any(Date),
+      });
+    });
+  });
 });
