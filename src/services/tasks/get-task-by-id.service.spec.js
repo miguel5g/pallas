@@ -21,26 +21,26 @@ describe('services/get-task-by-id', () => {
     expect(service.handler).toBeDefined();
   });
 
-  it('should calls prisma.task.findUnique', async () => {
-    const input = 'task id';
+  it('should calls prisma.task.findFirst', async () => {
+    const input = ['task.one', 'user.one'];
 
-    prisma.task.findUnique.mockResolvedValueOnce('any');
+    prisma.task.findFirst.mockResolvedValueOnce('any');
 
-    await service.handler(input);
+    await service.handler(...input);
 
-    expect(prisma.task.findUnique).toBeCalledTimes(1);
-    expect(prisma.task.findUnique).toBeCalledWith({
-      where: { id: input },
+    expect(prisma.task.findFirst).toBeCalledTimes(1);
+    expect(prisma.task.findFirst).toBeCalledWith({
+      where: { id: input[0], authorId: input[1] },
       select: expect.any(Object),
     });
   });
 
   it('should use select to filter task fields', async () => {
-    prisma.task.findUnique.mockResolvedValueOnce('any');
+    prisma.task.findFirst.mockResolvedValueOnce('any');
 
     await service.handler();
 
-    expect(prisma.task.findUnique).toBeCalledWith({
+    expect(prisma.task.findFirst).toBeCalledWith({
       where: expect.any(Object),
       select: {
         id: true,
@@ -55,7 +55,7 @@ describe('services/get-task-by-id', () => {
   it('should return task if it exists', async () => {
     const expected = 'task 1';
 
-    prisma.task.findUnique.mockResolvedValueOnce(expected);
+    prisma.task.findFirst.mockResolvedValueOnce(expected);
 
     const output = await service.handler();
 
@@ -65,7 +65,7 @@ describe('services/get-task-by-id', () => {
   it('should throw not found error if it not exists', async () => {
     expect.assertions(2);
 
-    prisma.task.findUnique.mockResolvedValueOnce(null);
+    prisma.task.findFirst.mockResolvedValueOnce(null);
 
     try {
       await service.handler();

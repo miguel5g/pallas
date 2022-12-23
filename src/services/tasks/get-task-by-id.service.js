@@ -5,9 +5,9 @@ class GetTaskByIdService {
   /**
    * @param {string} id
    */
-  async handler(id) {
-    const task = await prisma.task.findUnique({
-      where: { id },
+  async handler(id, authorId) {
+    const task = await prisma.task.findFirst({
+      where: { id, authorId },
       select: {
         id: true,
         title: true,
