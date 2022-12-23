@@ -51,12 +51,8 @@ describe('controllers/create-auth-session', () => {
   });
 
   it('should throw an error if it receives an invalid service instance', () => {
-    {
-      expect(() => new CreateAuthSessionController()).toThrow('Invalid service instance');
-    }
-    {
-      expect(() => new CreateAuthSessionController(controller)).toThrow('Invalid service instance');
-    }
+    expect(() => new CreateAuthSessionController()).toThrow('Invalid service instance');
+    expect(() => new CreateAuthSessionController(controller)).toThrow('Invalid service instance');
   });
 
   it('should thrown an error if request body is empty', async () => {
@@ -66,20 +62,13 @@ describe('controllers/create-auth-session', () => {
   });
 
   it('should throw an error when any property of the request body is invalid', async () => {
-    {
-      request.body = {
-        email: 'user.one@mail.com',
-      };
+    request.body = { email: 'user.one@mail.com' };
 
-      await expect(controller.handler(request, response)).rejects.toBeInstanceOf(z.ZodError);
-    }
-    {
-      request.body = {
-        password: '123456',
-      };
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(z.ZodError);
 
-      await expect(controller.handler(request, response)).rejects.toBeInstanceOf(z.ZodError);
-    }
+    request.body = { password: '123456' };
+
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(z.ZodError);
   });
 
   it('should calls service with request body data', async () => {
@@ -102,32 +91,29 @@ describe('controllers/create-auth-session', () => {
       .mockResolvedValueOnce(tokenMock)
       .mockResolvedValueOnce(tokenMock);
 
-    {
-      await controller.handler(request, response);
+    await controller.handler(request, response);
 
-      expect(response.cookie).toBeCalledTimes(1);
-      expect(response.cookie).toBeCalledWith('token', tokenMock, {
-        expires: new Date(2022, 9, 30, 12),
-        httpOnly: true,
-        path: '/',
-        secure: false,
-      });
-      expect(response.status).toBeCalledTimes(1);
-      expect(response.status).toBeCalledWith(201);
-      expect(response.json).toBeCalledTimes(1);
-      expect(response.json).toBeCalledWith({ message: 'Successfully authenticated' });
-    }
-    {
-      process.env.NODE_ENV = 'production';
+    expect(response.cookie).toBeCalledTimes(1);
+    expect(response.cookie).toBeCalledWith('token', tokenMock, {
+      expires: new Date(2022, 9, 30, 12),
+      httpOnly: true,
+      path: '/',
+      secure: false,
+    });
+    expect(response.status).toBeCalledTimes(1);
+    expect(response.status).toBeCalledWith(201);
+    expect(response.json).toBeCalledTimes(1);
+    expect(response.json).toBeCalledWith({ message: 'Successfully authenticated' });
 
-      await controller.handler(request, response);
+    process.env.NODE_ENV = 'production';
 
-      expect(response.cookie).toBeCalledWith('token', tokenMock, {
-        expires: new Date(2022, 9, 30, 12),
-        httpOnly: true,
-        path: '/',
-        secure: true,
-      });
-    }
+    await controller.handler(request, response);
+
+    expect(response.cookie).toBeCalledWith('token', tokenMock, {
+      expires: new Date(2022, 9, 30, 12),
+      httpOnly: true,
+      path: '/',
+      secure: true,
+    });
   });
 });

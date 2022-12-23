@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
+import { afterAll, afterEach, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import { DeleteAuthSessionController } from './delete-auth-session.controller';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
@@ -15,9 +15,6 @@ describe('controllers/delete-auth-session', () => {
 
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(systemTime);
-  });
-
-  beforeEach(() => {
     environment = process.env;
     controller = new DeleteAuthSessionController();
     request = new TestRequest();
@@ -30,6 +27,7 @@ describe('controllers/delete-auth-session', () => {
 
   afterEach(() => {
     process.env = environment;
+    jest.clearAllMocks();
   });
 
   it('should have an handler method', () => {
@@ -37,39 +35,34 @@ describe('controllers/delete-auth-session', () => {
   });
 
   it('should clear the token cookie', async () => {
-    {
-      process.env.NODE_ENV = 'development';
+    process.env.NODE_ENV = 'development';
 
-      await controller.handler(request, response);
+    await controller.handler(request, response);
 
-      expect(response.cookie).toBeCalledTimes(1);
-      expect(response.cookie).toBeCalledWith('token', '', {
-        expires: new Date(),
-        httpOnly: true,
-        path: '/',
-        secure: false,
-      });
-    }
-    {
-      process.env.NODE_ENV = 'production';
+    expect(response.cookie).toBeCalledTimes(1);
+    expect(response.cookie).toBeCalledWith('token', '', {
+      expires: new Date(),
+      httpOnly: true,
+      path: '/',
+      secure: false,
+    });
 
-      await controller.handler(request, response);
+    process.env.NODE_ENV = 'production';
 
-      expect(response.cookie).toBeCalledWith('token', '', {
-        expires: new Date(),
-        httpOnly: true,
-        path: '/',
-        secure: true,
-      });
-    }
+    await controller.handler(request, response);
+
+    expect(response.cookie).toBeCalledWith('token', '', {
+      expires: new Date(),
+      httpOnly: true,
+      path: '/',
+      secure: true,
+    });
   });
 
   it('should return a status of 200 with a message', async () => {
     await controller.handler(request, response);
 
     expect(response.json).toBeCalledTimes(1);
-    expect(response.json).toBeCalledWith({
-      message: 'Session deleted successfully',
-    });
+    expect(response.json).toBeCalledWith({ message: 'Session deleted successfully' });
   });
 });

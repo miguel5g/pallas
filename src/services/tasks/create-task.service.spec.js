@@ -25,8 +25,6 @@ describe('services/create-task', () => {
 
     await service.handler(input);
 
-    expect(prisma.task.create).toHaveBeenCalledWith({
-      data: input,
-    });
+    expect(prisma.task.create).toHaveBeenCalledWith({ data: input });
   });
 });

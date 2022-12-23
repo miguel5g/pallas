@@ -46,32 +46,31 @@ describe('controllers/create-user', () => {
   });
 
   it('should throw an error when any property is invalid', async () => {
-    {
-      request.body = {
-        ...user,
-        surname: '',
-      };
+    expect.assertions(8);
 
-      controller.handler(request, response).catch((error) => {
-        expect(error).toBeInstanceOf(z.ZodError);
-        expect(error.issues).toHaveLength(1);
-        expect(error.issues[0].code).toBe('too_small');
-        expect(error.issues[0].path).toEqual(['surname']);
-      });
-    }
-    {
-      request.body = {
-        ...user,
-        email: undefined,
-      };
+    request.body = {
+      ...user,
+      surname: '',
+    };
 
-      controller.handler(request, response).catch((error) => {
-        expect(error).toBeInstanceOf(z.ZodError);
-        expect(error.issues).toHaveLength(1);
-        expect(error.issues[0].code).toBe('invalid_type');
-        expect(error.issues[0].path).toEqual(['email']);
-      });
-    }
+    controller.handler(request, response).catch((error) => {
+      expect(error).toBeInstanceOf(z.ZodError);
+      expect(error.issues).toHaveLength(1);
+      expect(error.issues[0].code).toBe('too_small');
+      expect(error.issues[0].path).toEqual(['surname']);
+    });
+
+    request.body = {
+      ...user,
+      email: undefined,
+    };
+
+    controller.handler(request, response).catch((error) => {
+      expect(error).toBeInstanceOf(z.ZodError);
+      expect(error.issues).toHaveLength(1);
+      expect(error.issues[0].code).toBe('invalid_type');
+      expect(error.issues[0].path).toEqual(['email']);
+    });
   });
 
   it('should calls create user service if request body is valid', async () => {

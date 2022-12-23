@@ -25,15 +25,14 @@ describe('services/update-task', () => {
     const id = 'task.one';
     const userId = 'user.one';
     const input = { title: 'updated task title' };
+    const expected = { where: { AND: [{ id }, { authorId: userId }] } };
 
     prisma.task.findFirst.mockResolvedValueOnce('anything not nullable');
 
     await service.handler({ id, userId, ...input });
 
     expect(prisma.task.findFirst).toBeCalledTimes(1);
-    expect(prisma.task.findFirst).toBeCalledWith({
-      where: { AND: [{ id }, { authorId: userId }] },
-    });
+    expect(prisma.task.findFirst).toBeCalledWith(expected);
   });
 
   it('should throw not found error if it not exists', async () => {
@@ -82,9 +81,7 @@ describe('services/update-task', () => {
 
     expect(prisma.task.update).toBeCalledTimes(1);
     expect(prisma.task.update).toBeCalledWith({
-      where: {
-        id,
-      },
+      where: { id },
       data: input,
     });
   });
