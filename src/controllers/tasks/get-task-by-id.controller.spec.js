@@ -37,9 +37,7 @@ describe('controllers/get-task-by-id', () => {
   it('should calls service with task id', async () => {
     const expected = 'task id';
 
-    request.params = {
-      id: expected,
-    };
+    request.params = { id: expected };
 
     await controller.handler(request, response);
 

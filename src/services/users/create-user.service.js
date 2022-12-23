@@ -9,9 +9,7 @@ class CreateUserService {
     const hashedPassword = await hashText(password);
 
     try {
-      await prisma.user.create({
-        data: { name, surname, email, password: hashedPassword },
-      });
+      await prisma.user.create({ data: { name, surname, email, password: hashedPassword } });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new BadRequestError('Email already exists');

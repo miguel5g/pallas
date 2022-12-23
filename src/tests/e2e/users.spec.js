@@ -154,11 +154,7 @@ describe('/api/users', () => {
       expect(response.statusCode).toBe(201);
       expect(response.body).toEqual({ message: 'User created successfully' });
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email: input.email,
-        },
-      });
+      const user = await prisma.user.findUnique({ where: { email: input.email } });
 
       expect(compareText(user.password, input.password)).resolves.toBe(true);
       expect(user).toEqual({

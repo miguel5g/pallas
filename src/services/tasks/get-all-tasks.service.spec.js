@@ -27,9 +27,7 @@ describe('services/get-all-tasks', () => {
 
     expect(prisma.task.findMany).toBeCalledTimes(1);
     expect(prisma.task.findMany).toBeCalledWith({
-      where: {
-        authorId: input,
-      },
+      where: { authorId: input },
       select: expect.any(Object),
     });
   });

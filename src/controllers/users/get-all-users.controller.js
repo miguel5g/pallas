@@ -10,7 +10,7 @@ class GetAllUsersController {
    * @param {GetAllUsersService} service
    */
   constructor(service) {
-    if (!service) {
+    if (!service || !(service instanceof GetAllUsersService)) {
       throw new Error('Invalid service instance');
     }
 

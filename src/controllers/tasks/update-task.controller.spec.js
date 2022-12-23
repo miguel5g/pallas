@@ -1,10 +1,10 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import { ZodError } from 'zod';
 import { UpdateTaskController } from './update-task.controller';
 import { UpdateTaskService } from '../../services/tasks/update-task.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
-import { BadRequestError, UnprocessableError } from '../../errors';
-import { ZodError } from 'zod';
+import { BadRequestError } from '../../errors';
 
 describe('controllers/update-task', () => {
   /** @type {UpdateTaskController} */

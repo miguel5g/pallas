@@ -30,9 +30,7 @@ describe('services/get-task-by-id', () => {
 
     expect(prisma.task.findUnique).toBeCalledTimes(1);
     expect(prisma.task.findUnique).toBeCalledWith({
-      where: {
-        id: input,
-      },
+      where: { id: input },
       select: expect.any(Object),
     });
   });

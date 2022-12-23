@@ -67,9 +67,7 @@ describe('controllers/get-user-by-id.js', () => {
       permissions: 2,
     };
 
-    const expectedOutput = {
-      name: 'sample user',
-    };
+    const expectedOutput = { name: 'sample user' };
 
     GetUserByIdService.prototype.handler.mockResolvedValueOnce(expectedOutput);
 

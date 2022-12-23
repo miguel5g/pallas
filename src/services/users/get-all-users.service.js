@@ -1,8 +1,6 @@
 import { prisma } from '../../libs/prisma';
 
 class GetAllUsersService {
-  constructor() {}
-
   async handler(page) {
     const validPage = Math.trunc(Math.max(1, +page)) || 1;
 

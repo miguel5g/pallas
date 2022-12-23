@@ -5,7 +5,14 @@ class CreateUserController {
   /** @type {CreateUserService} */
   #service;
 
+  /**
+   * @param {CreateUserService} service
+   */
   constructor(service) {
+    if (!service || !(service instanceof CreateUserService)) {
+      throw new Error('Invalid service instance');
+    }
+
     this.#service = service;
     this.handler = this.handler.bind(this);
   }

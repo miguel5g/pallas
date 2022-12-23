@@ -38,9 +38,7 @@ describe('controllers/get-all-tasks', () => {
   it('should calls service with user id', async () => {
     const expected = 'user id';
 
-    request.user = {
-      id: expected,
-    };
+    request.user = { id: expected };
 
     await controller.handler(request, response);
 

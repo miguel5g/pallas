@@ -26,9 +26,7 @@ class GetAllTasksController {
 
     const tasks = await this.#service.handler(id);
 
-    return response.json({
-      tasks,
-    });
+    return response.json({ tasks });
   }
 }
 
