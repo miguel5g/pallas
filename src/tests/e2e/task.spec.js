@@ -134,6 +134,17 @@ describe('/api/tasks', () => {
       expect(response.body).toEqual({ message: 'Task not found' });
     });
 
+    it('should returns not found if the task belongs to someone else', async () => {
+      const token = encode({ id: 'user.one', permissions: 0 });
+
+      const response = await request(app)
+        .get('/api/tasks/task.three')
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual({ message: 'Task not found' });
+    });
+
     it('should returns json content type with status code 200', async () => {
       const token = encode({ id: 'user.one', permissions: 0 });
 
