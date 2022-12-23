@@ -34,14 +34,15 @@ describe('controllers/get-task-by-id', () => {
     expect(() => new GetTaskByIdController()).toThrow('Invalid service instance');
   });
 
-  it('should calls service with task id', async () => {
-    const expected = 'task id';
+  it('should calls service with task id and user id', async () => {
+    const input = ['task.one', 'user.one'];
 
-    request.params = { id: expected };
+    request.params = { id: input[0] };
+    request.user = { id: input[1] };
 
     await controller.handler(request, response);
 
-    expect(GetTaskByIdService.prototype.handler).toBeCalledWith(expected);
+    expect(GetTaskByIdService.prototype.handler).toBeCalledWith(...input);
   });
 
   it('should calls json with service output', async () => {

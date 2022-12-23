@@ -23,8 +23,9 @@ class GetTaskByIdController {
    */
   async handler(request, response) {
     const { id } = request.params;
+    const { id: userId } = request.user;
 
-    const task = await this.#service.handler(id);
+    const task = await this.#service.handler(id, userId);
 
     return response.json(task);
   }
