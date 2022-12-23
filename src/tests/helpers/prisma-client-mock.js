@@ -1,14 +1,5 @@
 import { jest } from '@jest/globals';
 
-jest.mock('@prisma/client', () => {
-  return {
-    __esModule: true,
-    Prisma: {
-      PrismaClientKnownRequestError: TestPrismaKnowError,
-    },
-  };
-});
-
 class TestPrismaKnowError extends Error {
   /** @type {string} */
   code;
@@ -19,5 +10,10 @@ class TestPrismaKnowError extends Error {
     this.code = code;
   }
 }
+
+jest.mock('@prisma/client', () => ({
+  __esModule: true,
+  Prisma: { PrismaClientKnownRequestError: TestPrismaKnowError },
+}));
 
 export { TestPrismaKnowError };

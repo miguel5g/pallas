@@ -322,4 +322,52 @@ describe('/api/tasks', () => {
       });
     });
   });
+
+  describe('DELETE /:id', () => {
+    const token = encode({ id: 'user.one', permissions: 0 });
+
+    it('should return unauthorized when user is not logged in', async () => {
+      const response = await request(app).delete('/api/tasks/task.one');
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual({ message: 'Invalid token' });
+    });
+
+    it('should return 404 when the task does not exist', async () => {
+      const id = 'not exists';
+
+      const response = await request(app)
+        .delete(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('message', 'Task not found');
+    });
+
+    it('should return 404 when the task belongs to someone else', async () => {
+      const id = 'task.three';
+
+      const response = await request(app)
+        .delete(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('message', 'Task not found');
+    });
+
+    it('should delete task on database', async () => {
+      const id = 'task.one';
+
+      const response = await request(app)
+        .delete(`/api/tasks/${id}`)
+        .set('Cookie', [`token=${token}`]);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('message', 'Task successfully deleted');
+
+      const task = await prisma.task.findUnique({ where: { id } });
+
+      expect(task).toBe(null);
+    });
+  });
 });
