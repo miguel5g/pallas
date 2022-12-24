@@ -101,7 +101,7 @@ describe('middlewares/protected-route', () => {
   it('should throw unauthorized error when user token is invalid (Header)', () => {
     expect.assertions(3);
 
-    request.headers = { authorization: 'any' };
+    request.headers = { authorization: 'Bearer any' };
 
     token.decode.mockImplementation(() => {
       throw new JsonWebTokenError('Error');
