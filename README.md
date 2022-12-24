@@ -10,9 +10,15 @@ Tecnologias e ferramentas que foram utilizadas para desenvolver este projeto:
 - [Express](https://expressjs.com/pt-br/)
 - [SWC](https://swc.rs/)
 - [Jest](https://jestjs.io/)
-- [Docker](https://www.docker.com/)
 - [Prisma](https://www.prisma.io/)
+- [Zod](https://zod.dev/)
+- [JWT](https://jwt.io/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Docker](https://www.docker.com/)
 - [GitHub Actions](https://github.com/features/actions)
+- [Sentry](https://sentry.io/)
+- [Railway](https://railway.app/)
 
 ## :books: Instalação
 
@@ -21,8 +27,8 @@ Passo a passo para rodar a aplicação no seu computador.
 1. Clonar repositório:
 
 ```bash
-git clone https://github.com/miguel5g/todo-app.git
-cd todo-app
+git clone https://github.com/miguel5g/castiel.git
+cd castiel
 ```
 
 2. Instalar dependências:
@@ -38,6 +44,8 @@ cp .env.example .env.development
 ```
 
 _OBS: Preencher com suas variáveis de ambiente com a url do banco de dados MySQL_
+
+_OBS²: Mais abaixo tem o passo a passo para criar um container docker com imagem do MySQL_
 
 4. Executar projeto
 
