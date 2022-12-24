@@ -15,7 +15,10 @@ class ProtectedRouteMiddleware {
    * @returns {Promise<void>}
    */
   handler(request, _response, next) {
-    const { token } = request.cookies;
+    const { token: cookieToken } = request.cookies;
+    const { authorization } = request.headers;
+
+    const token = cookieToken || authorization?.split(' ')[1];
 
     if (!token) throw new UnauthorizedError('Invalid token');
 

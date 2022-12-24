@@ -12,6 +12,8 @@ class TestRequest {
   user = {};
 
   cookies = {};
+
+  headers = {};
 }
 
 /** @type {import('express').Response} */
