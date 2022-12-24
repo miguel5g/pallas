@@ -34,7 +34,7 @@ describe('/api/auth', () => {
   });
 
   describe('POST /', () => {
-    it('should return a message and status 500 when request body is invalid', async () => {
+    it('should return a message and status 400 when request body is invalid', async () => {
       const response = await request(app).post('/api/auth');
 
       expect(response.status).toBe(400);
@@ -82,6 +82,19 @@ describe('/api/auth', () => {
       expect(response.headers['set-cookie'][0]).toMatch(
         /^token=.+\..+\..+;\sPath=\/; Expires=Sun, 30 Oct 2022 12:00:00 GMT; HttpOnly$/
       );
+    });
+
+    it('should return a 201 status and token on response body when the password matches', async () => {
+      const response = await request(app)
+        .post('/api/auth')
+        .query({ mode: 'authorization' })
+        .send({ email: 'mail.one@example.com', password: '123456' });
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual({
+        message: 'Successfully authenticated',
+        token: expect.stringMatching(/^.+\..+\..+$/),
+      });
     });
   });
 
