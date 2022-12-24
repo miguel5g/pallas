@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { CreateAuthSessionController } from './create-auth-session.controller';
 import { CreateAuthSessionService } from '../../services/auth/create-auth-session.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
+import { BadRequestError } from '../../errors';
 
 describe('controllers/create-auth-session', () => {
   const systemTime = new Date(2022, 9, 29, 12);
@@ -55,6 +56,28 @@ describe('controllers/create-auth-session', () => {
     expect(() => new CreateAuthSessionController(controller)).toThrow('Invalid service instance');
   });
 
+  it('should throw bad request error if mode query parameter is invalid', async () => {
+    expect.assertions(4);
+
+    request.query = { mode: 'invalid' };
+
+    try {
+      await controller.handler(request, response);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestError);
+      expect(error).toHaveProperty('message', 'Invalid request mode query');
+    }
+
+    request.query = { mode: ['authorization'] };
+
+    try {
+      await controller.handler(request, response);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestError);
+      expect(error).toHaveProperty('message', 'Invalid request mode query');
+    }
+  });
+
   it('should thrown an error if request body is empty', async () => {
     request.body = {};
 
@@ -79,6 +102,27 @@ describe('controllers/create-auth-session', () => {
 
     expect(CreateAuthSessionService.prototype.handler).toBeCalledTimes(1);
     expect(CreateAuthSessionService.prototype.handler).toBeCalledWith(credentials);
+  });
+
+  it('should return token on response body if mode query parameter is "authorization"', async () => {
+    const tokenMock = 'token-mock';
+    const credentials = { email: 'user.one@mail.com', password: '123456' };
+
+    request.query = { mode: 'authorization' };
+    request.body = credentials;
+
+    CreateAuthSessionService.prototype.handler.mockResolvedValueOnce(tokenMock);
+
+    await controller.handler(request, response);
+
+    expect(response.cookie).not.toBeCalled();
+    expect(response.status).toBeCalledTimes(1);
+    expect(response.status).toBeCalledWith(201);
+    expect(response.json).toBeCalledTimes(1);
+    expect(response.json).toBeCalledWith({
+      message: 'Successfully authenticated',
+      token: tokenMock,
+    });
   });
 
   it('should set response token cookie with service return', async () => {
