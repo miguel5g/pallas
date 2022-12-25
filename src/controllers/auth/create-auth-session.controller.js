@@ -1,3 +1,4 @@
+import { BadRequestError } from '../../errors';
 import { CreateAuthSessionService } from '../../services/auth/create-auth-session.service';
 import { CredentialsSchema } from '../../validators';
 
@@ -25,11 +26,21 @@ class CreateAuthSessionController {
    * @returns {Promise<void>}
    */
   async handler(request, response) {
+    const { mode } = request.query;
+
+    if (mode && (typeof mode !== 'string' || !['authorization', 'cookies'].includes(mode))) {
+      throw new BadRequestError('Invalid request mode query');
+    }
+
     const { email, password } = request.body;
 
     const credentials = CredentialsSchema.parse({ email, password });
 
     const token = await this.#service.handler(credentials);
+
+    if (mode === 'authorization') {
+      return response.status(201).json({ message: 'Successfully authenticated', token });
+    }
 
     return response
       .cookie('token', token, {

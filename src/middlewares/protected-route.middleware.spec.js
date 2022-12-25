@@ -14,12 +14,15 @@ describe('middlewares/protected-route', () => {
   let request;
   /** @type {import('express').Response} */
   let response;
+  /** @type {import('express').NextFunction} */
+  let next;
 
   beforeAll(() => {
     middleware = new ProtectedRouteMiddleware();
 
     request = new TestRequest();
     response = new TestResponse();
+    next = jest.fn();
   });
 
   afterEach(() => {
@@ -59,10 +62,46 @@ describe('middlewares/protected-route', () => {
     }
   });
 
+  it('should throw unauthorized error when user token is expired (Header)', () => {
+    expect.assertions(3);
+
+    request.header = { authorization: 'Bearer any' };
+
+    token.decode.mockImplementation(() => {
+      throw new TokenExpiredError('Error', new Date());
+    });
+
+    try {
+      middleware.handler(request, response);
+    } catch (error) {
+      expect(token.decode).toBeCalledWith('any');
+      expect(error).toBeInstanceOf(UnauthorizedError);
+      expect(error.message).toBe('Your token has expired');
+    }
+  });
+
   it('should throw unauthorized error when user token is invalid', () => {
     expect.assertions(3);
 
     request.cookies = { token: 'any' };
+
+    token.decode.mockImplementation(() => {
+      throw new JsonWebTokenError('Error');
+    });
+
+    try {
+      middleware.handler(request, response);
+    } catch (error) {
+      expect(token.decode).toBeCalledWith('any');
+      expect(error).toBeInstanceOf(UnauthorizedError);
+      expect(error.message).toBe('Your token is invalid');
+    }
+  });
+
+  it('should throw unauthorized error when user token is invalid (Header)', () => {
+    expect.assertions(3);
+
+    request.headers = { authorization: 'Bearer any' };
 
     token.decode.mockImplementation(() => {
       throw new JsonWebTokenError('Error');
@@ -93,5 +132,29 @@ describe('middlewares/protected-route', () => {
       expect(token.decode).toBeCalledWith('any');
       expect(error).toBe(error);
     }
+  });
+
+  it('should call next middleware if the token is ok', async () => {
+    const user = 'token user';
+
+    request.cookies = { token: 'any' };
+    token.decode.mockReturnValueOnce(user);
+
+    await middleware.handler(request, response, next);
+
+    expect(next).toBeCalledTimes(1);
+    expect(request.user).toBe(user);
+  });
+
+  it('should call next middleware if the token is ok (Header)', async () => {
+    const user = 'token user';
+
+    request.headers = { authorization: 'Bearer any' };
+    token.decode.mockReturnValueOnce(user);
+
+    await middleware.handler(request, response, next);
+
+    expect(next).toBeCalledTimes(1);
+    expect(request.user).toBe(user);
   });
 });
