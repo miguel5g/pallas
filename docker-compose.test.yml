@@ -4,9 +4,9 @@ services:
   test-database:
     image: mysql:8
     restart: always
-    container_name: castiel-e2e-tests
+    container_name: pallas-e2e-tests
     ports:
       - '3307:3306'
     environment:
       MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: castiel_tests
+      MYSQL_DATABASE: pallas_tests
