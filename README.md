@@ -1,6 +1,4 @@
-# Castiel
-
-Taskfy API.
+# Pallas
 
 ## :test_tube: Techs
 
@@ -27,8 +25,8 @@ Passo a passo para rodar a aplicação no seu computador.
 1. Clonar repositório:
 
 ```bash
-git clone https://github.com/miguel5g/castiel.git
-cd castiel
+git clone https://github.com/miguel5g/pallas.git
+cd pallas
 ```
 
 2. Instalar dependências:
