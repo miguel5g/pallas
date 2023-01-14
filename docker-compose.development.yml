@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  mail-catcher:
+    container_name: mail-catcher
+    image: sj26/mailcatcher
+    restart: 'no'
+    ports:
+      - 1025:1025
+      - 1080:1080

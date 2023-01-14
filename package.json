@@ -14,6 +14,8 @@
     "build:watch": "swc src -w --no-swcrc --config-file .swcrc.build -d dist",
     "docker:tests:up": "docker compose -f docker-compose.test.yml up -d",
     "docker:tests:down": "docker compose -f docker-compose.test.yml down",
+    "docker:dev:up": "docker compose -f docker-compose.development.yml up -d",
+    "docker:dev:down": "docker compose -f docker-compose.development.yml down",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:migrate": "dotenv -e .env.development -- prisma migrate dev",
     "lint": "eslint \"src/**/*.js\"",
