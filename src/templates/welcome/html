@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <header>
+      <img
+        src="https://cdn.discordapp.com/attachments/879768675626942525/1063133045605007400/taskfy.svg"
+        alt="taskfy"
+      />
+    </header>
+
+    <p>Olá, <b>{{ name }}</b>!</p>
+
+    <p>
+      Seja bem-vindo a plataforma que vai ajudá-lo a manter sua vida organizada e produtiva! Agora
+      você tem acesso a uma ferramenta poderosa para gerenciar suas tarefas pessoais e alcançar seus
+      objetivos.
+    </p>
+
+    <p>Com a nossa plataforma você poderá:</p>
+
+    <ul>
+      <li>Criar listas de tarefas</li>
+      <li>Organizar suas tarefas por prioridade</li>
+      <li>Definir prazos e lembretes</li>
+      <li>Acompanhar suas metas</li>
+      <li>Compartilhar tarefas com outras pessoas</li>
+    </ul>
+
+    <p>
+      E isso é apenas o começo! Continuaremos desenvolvendo novos recursos para melhorar sua
+      experiência.
+    </p>
+
+    <p>
+      Se você tiver alguma dúvida ou precisar de ajuda, por favor, entre em contato conosco. Estamos
+      sempre disponíveis para ajudá-lo.
+    </p>
+
+    <p>Comece hoje mesmo a dominar sua lista de tarefas e alcance suas metas!</p>
+
+    <p>
+      <i
+        >Atenciosamente, <br />
+        Miguel Ângelo.</i
+      >
+    </p>
+  </body>
+</html>
