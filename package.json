@@ -17,6 +17,7 @@
     "docker:dev:up": "docker compose -f docker-compose.development.yml up -d",
     "docker:dev:down": "docker compose -f docker-compose.development.yml down",
     "prisma:deploy": "prisma migrate deploy",
+    "prisma:deploy:dev": "dotenv -e .env.development -- prisma migrate deploy",
     "prisma:migrate": "dotenv -e .env.development -- prisma migrate dev",
     "lint": "eslint \"src/**/*.js\"",
     "lint:fix": "eslint \"src/**/*.js\" --fix",
