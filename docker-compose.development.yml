@@ -8,3 +8,12 @@ services:
     ports:
       - 1025:1025
       - 1080:1080
+  pallas-database:
+    image: mysql:8
+    restart: 'no'
+    container_name: pallas-database
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: pallas
+      MYSQL_DATABASE: pallas
