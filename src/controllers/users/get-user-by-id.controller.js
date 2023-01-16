@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '../../errors';
+import { ForbiddenError } from '../../errors';
 import { hasPermissions } from '../../libs/permissions';
 import { GetUserByIdService } from '../../services/users/get-user-by-id.service';
 
@@ -26,7 +26,7 @@ class GetUserByIdController {
     const userPermissions = request.user?.permissions;
 
     if (!userPermissions || !hasPermissions(userPermissions, ['READ_USER'])) {
-      throw new UnauthorizedError();
+      throw new ForbiddenError();
     }
 
     const { id } = request.params;

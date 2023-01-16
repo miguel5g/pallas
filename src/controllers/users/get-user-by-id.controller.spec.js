@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 import { GetUserByIdController } from './get-user-by-id.controller';
 import { GetUserByIdService } from '../../services/users/get-user-by-id.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
-import { UnauthorizedError } from '../../errors';
+import { ForbiddenError } from '../../errors';
 
 describe('controllers/get-user-by-id.js', () => {
   /** @type {GetUserByIdController} */
@@ -36,17 +36,17 @@ describe('controllers/get-user-by-id.js', () => {
     expect(() => new GetUserByIdController()).toThrow('Invalid service instance');
   });
 
-  it('should throw unauthorized error if not find user permissions', async () => {
-    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+  it('should throw forbidden error if not find user permissions', async () => {
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(ForbiddenError);
   });
 
-  it('should throw an unauthorized error if the user does not have the correct permissions', async () => {
+  it('should throw an forbidden error if the user does not have the correct permissions', async () => {
     request.user = {
       id: 'test',
       permissions: 0,
     };
 
-    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(ForbiddenError);
   });
 
   it('should calls service.handler', async () => {
