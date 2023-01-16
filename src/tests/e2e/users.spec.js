@@ -69,8 +69,8 @@ describe('/api/users', () => {
         .get('/api/users')
         .set('Cookie', [`token=${token}`]);
 
-      expect(response.statusCode).toBe(401);
-      expect(response.body).toEqual({ message: 'Unauthorized' });
+      expect(response.statusCode).toBe(403);
+      expect(response.body).toEqual({ message: 'Forbidden' });
     });
 
     it('should returns json content type with status code 200', async () => {
@@ -192,8 +192,8 @@ describe('/api/users', () => {
         .get('/api/users/user.two')
         .set('Cookie', [`token=${token}`]);
 
-      expect(response.statusCode).toBe(401);
-      expect(response.body).toEqual({ message: 'Unauthorized' });
+      expect(response.statusCode).toBe(403);
+      expect(response.body).toEqual({ message: 'Forbidden' });
     });
 
     it('should return user data with status 200', async () => {

@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 import { GetAllUsersController } from './get-all-users.controller';
 import { GetAllUsersService } from '../../services/users/get-all-users.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
-import { UnauthorizedError } from '../../errors';
+import { ForbiddenError } from '../../errors/forbidden.error';
 
 describe('controllers/get-all-users', () => {
   /** @type {GetAllUsersController} */
@@ -32,17 +32,17 @@ describe('controllers/get-all-users', () => {
     expect(controller.handler).toBeDefined();
   });
 
-  it('should throw unauthorized error if not find user permissions', async () => {
-    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+  it('should throw forbidden error if not find user permissions', async () => {
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(ForbiddenError);
   });
 
-  it('should throw an unauthorized error if the user does not have the correct permissions', async () => {
+  it('should throw an forbidden error if the user does not have the correct permissions', async () => {
     request.user = {
       id: 'test',
       permissions: 0,
     };
 
-    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(UnauthorizedError);
+    await expect(controller.handler(request, response)).rejects.toBeInstanceOf(ForbiddenError);
   });
 
   it('should calls service.handler', async () => {
