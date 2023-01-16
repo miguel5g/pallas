@@ -1,4 +1,4 @@
-import { ForbiddenError } from '../../errors/forbidden.error';
+import { ForbiddenError } from '../../errors';
 import { hasPermissions } from '../../libs/permissions';
 import { GetUserByIdService } from '../../services/users/get-user-by-id.service';
 

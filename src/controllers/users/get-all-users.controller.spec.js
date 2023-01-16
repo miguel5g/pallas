@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@j
 import { GetAllUsersController } from './get-all-users.controller';
 import { GetAllUsersService } from '../../services/users/get-all-users.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
-import { ForbiddenError } from '../../errors/forbidden.error';
+import { ForbiddenError } from '../../errors';
 
 describe('controllers/get-all-users', () => {
   /** @type {GetAllUsersController} */
