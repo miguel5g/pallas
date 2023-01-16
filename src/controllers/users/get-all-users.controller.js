@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '../../errors';
+import { ForbiddenError } from '../../errors/forbidden.error';
 import { hasPermissions } from '../../libs/permissions';
 import { GetAllUsersService } from '../../services/users/get-all-users.service';
 
@@ -27,7 +27,7 @@ class GetAllUsersController {
     const userPermissions = request.user?.permissions;
 
     if (!userPermissions || !hasPermissions(userPermissions, ['READ_USER'])) {
-      throw new UnauthorizedError();
+      throw new ForbiddenError();
     }
 
     const { page: queryPage } = request.query;
