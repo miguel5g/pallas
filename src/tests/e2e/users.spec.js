@@ -1,3 +1,4 @@
+import axios from 'axios';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
@@ -165,6 +166,13 @@ describe('/api/users', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
+
+      const { data: email } = await axios.get('http://127.0.0.1:1080/messages/1.json');
+
+      expect(email).toHaveProperty('sender', '<taskfy@catsuc.com>');
+      expect(email).toHaveProperty('subject', 'Domine sua lista de tarefas com a gente!');
+      expect(email).toHaveProperty('recipients');
+      expect(email.recipients).toEqual([`<${input.email}>`]);
     });
   });
 

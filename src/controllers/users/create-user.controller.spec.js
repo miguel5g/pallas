@@ -1,6 +1,8 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { z } from 'zod';
 
+import '../../tests/helpers/send-mail-mock';
+import * as sendMailLib from '../../libs/send-mail';
 import { CreateUserController } from './create-user.controller';
 import { CreateUserService } from '../../services/users/create-user.service';
 import { TestRequest, TestResponse } from '../../tests/helpers/express-mocks';
@@ -89,5 +91,17 @@ describe('controllers/create-user', () => {
 
     expect(response.status).toBeCalledWith(201);
     expect(response.json).toBeCalledWith({ message: 'User created successfully' });
+  });
+
+  it('should send welcome email when user is created', async () => {
+    request.body = user;
+
+    await controller.handler(request, response);
+
+    expect(response.status).toBeCalledWith(201);
+    expect(sendMailLib.sendMail).toBeCalledWith('welcome', {
+      to: user.email,
+      name: user.name,
+    });
   });
 });
