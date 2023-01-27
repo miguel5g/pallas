@@ -30,9 +30,9 @@ class CreateUserController {
 
     await this.#service.handler(user);
 
-    response.status(201).json({ message: 'User created successfully' });
-
     await sendMail('welcome', { to: email, name });
+
+    response.status(201).json({ message: 'User created successfully' });
   }
 }
 
