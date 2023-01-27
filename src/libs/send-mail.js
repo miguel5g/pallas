@@ -19,7 +19,7 @@ const transport = nodemailer.createTransport({
 async function sendMail(template, { to, ...data }) {
   const { html, text, title, from } = await renderTemplate(template, data);
 
-  transport.sendMail({
+  await transport.sendMail({
     from,
     to,
     subject: title,
