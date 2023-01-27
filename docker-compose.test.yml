@@ -1,12 +1,19 @@
 version: '3.9'
 
 services:
-  test-database:
-    image: mysql:8
-    restart: always
-    container_name: pallas-e2e-tests
+  mail-catcher:
+    container_name: mail-catcher-e2e-tests
+    image: sj26/mailcatcher
+    restart: 'no'
     ports:
-      - '3307:3306'
+      - 1025:1025
+      - 1080:1080
+  pallas-database:
+    image: mysql:8
+    restart: 'no'
+    container_name: pallas-database-e2e-tests
+    ports:
+      - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: pallas_tests
