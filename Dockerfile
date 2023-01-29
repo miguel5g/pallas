@@ -18,7 +18,7 @@ COPY ./prisma ./prisma
 RUN npx prisma generate
 
 # Stage 2
-FROM node:16-alpine AS release
+FROM node:16 AS release
 
 WORKDIR /app
 
