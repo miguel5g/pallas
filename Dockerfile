@@ -30,4 +30,6 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 COPY --from=builder /app/dist ./dist
 
+COPY ./public ./public
+
 CMD ["npm", "run", "start"]
