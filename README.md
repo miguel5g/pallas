@@ -1,76 +1,74 @@
 # Pallas
 
-## :test_tube: Techs
+Pallas is a project that provides a platform for managing tasks. With its user-friendly interface and powerful features, Pallas makes it easy for individual users and groups.
 
-Tecnologias e ferramentas que foram utilizadas para desenvolver este projeto:
+## :test_tube: Technologies
 
-- [NodeJs](https://nodejs.org/)
-- [Express](https://expressjs.com/pt-br/)
-- [SWC](https://swc.rs/)
-- [Jest](https://jestjs.io/)
-- [Prisma](https://www.prisma.io/)
-- [Zod](https://zod.dev/)
-- [JWT](https://jwt.io/)
-- [ESLint](https://eslint.org/)
-- [Prettier](https://prettier.io/)
-- [Docker](https://www.docker.com/)
-- [GitHub Actions](https://github.com/features/actions)
-- [Sentry](https://sentry.io/)
-- [Railway](https://railway.app/)
+This project utilizes the following technologies:
 
-## :books: Instalação
+- Node.js
+- Express
+- MySQL
+- SWC
+- Jest
+- Prisma
+- Zod
+- JWT
+- ESLint
+- Prettier
+- Docker
+- GitHub Actions
+- Sentry
+- Railway
 
-Passo a passo para rodar a aplicação no seu computador.
+These technologies were carefully selected to provide a robust and efficient application with the latest development standards.
 
-1. Clonar repositório:
+## :books: How to run
+
+This project is designed for ease of execution, and you can run it locally with the following steps.
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/miguel5g/pallas.git
 cd pallas
 ```
 
-2. Instalar dependências:
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Configurar variáveis de ambiente:
+3. Set up environment variables:
 
 ```bash
 cp .env.example .env.development
 ```
 
-_OBS: Preencher com suas variáveis de ambiente com a url do banco de dados MySQL_
+_**Note:** Fill in the required values in the `.env.development` file._
 
-_OBS²: Mais abaixo tem o passo a passo para criar um container docker com imagem do MySQL_
+4. Start the development containers:
 
-4. Executar projeto
+```bash
+npm run docker:dev:up
+```
+
+5. Launch the project:
 
 ```bash
 npm run start:dev
 ```
 
-### Criando e configurando container MySQL com Docker
+Congratulations! The project is now running and accessible at the following URLs and servers:
 
-Para criar você pode utilizar o seguinte comando:
+- API: `http://localhost:4000`
+- SMTP Client: `http://localhost:1080`
+- SMTP Server: `smtp://localhost:1025`
+- MySQL Container: `mysql://root:pallas@localhost:3306/pallas`
 
-```bash
-docker run --name <container name> -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<password> -d mysql:8
-```
+Enjoy using the project!
 
-**Connection url:** `mysql://root:<password>@localhost:3306/<database name>`
+## :sparkles: How to contribute
 
-Para continuar com o desenvolvimento precisamos criar um shadow database para poder criar migrations.
-
-```bash
-docker exec -i <container name> mysql -uroot -p<password> <<< "CREATE DATABASE <database name>_shadow;"
-```
-
-**Shadow connection url:** `mysql://root:<password>@localhost:3306/<database name>_shadow`
-
-## :sparkles: Contribuições
-
-Contribuições são sempre bem-vindas!
-
-Você pode contribuir de diversas formas, desde da sugestão de uma feature ou até mesmo mexendo no código.
+We appreciate your contributions to the Pallas project! To find out how to contribute, take a look at our contribution guide located [here](https://github.com/miguel5g/pallas/wiki#how-to-contribute-to-the-project). Thank you for your interest in making Pallas even better!
